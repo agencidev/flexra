@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 export const posts = [
   {
@@ -349,11 +350,13 @@ export function Blog37() {
                   >
                     {/* Image */}
                     <div className="p-4 pb-0">
-                      <div className="rounded-2xl overflow-hidden">
-                        <img
+                      <div className="rounded-2xl overflow-hidden relative aspect-[4/3]">
+                        <Image
                           src={post.image}
                           alt={post.title}
-                          className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300"
+                          fill
+                          sizes="(min-width: 1024px) 380px, 320px"
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                     </div>

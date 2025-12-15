@@ -1,6 +1,7 @@
 "use client";
 
 import { PageLayout } from "../../components/PageLayout";
+import Image from "next/image";
 
 export default function OmFlexraPage() {
   return (
@@ -51,33 +52,39 @@ export default function OmFlexraPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face" 
+              <div className="relative w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face"
                   alt="Team member"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="128px"
+                  className="object-cover"
                 />
               </div>
               <h3 className="font-semibold text-lg">Erik Lindqvist</h3>
               <p className="text-gray-600 text-sm">VD & Grundare</p>
             </div>
             <div className="text-center">
-              <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face" 
+              <div className="relative w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face"
                   alt="Team member"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="128px"
+                  className="object-cover"
                 />
               </div>
               <h3 className="font-semibold text-lg">Anna Bergström</h3>
               <p className="text-gray-600 text-sm">Tech Lead</p>
             </div>
             <div className="text-center">
-              <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" 
+              <div className="relative w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
                   alt="Team member"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="128px"
+                  className="object-cover"
                 />
               </div>
               <h3 className="font-semibold text-lg">Marcus Holm</h3>

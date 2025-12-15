@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Vad vi gör", href: "/vad-vi-gor" },
@@ -35,10 +36,14 @@ export function Navbar1() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img
+            <Image
               src="/flexra-logo-horiz-white.webp"
               alt="Flexra"
-              className="h-6 md:h-7"
+              width={300}
+              height={88}
+              priority
+              sizes="(min-width: 768px) 112px, 96px"
+              className="h-6 md:h-7 w-auto"
             />
           </Link>
 

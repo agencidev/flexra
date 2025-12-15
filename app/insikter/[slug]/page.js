@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Share2, Bookmark, Linkedin, Twitter } from "lucide-react";
 import { Navbar1 } from "../../../components/Navbar1";
@@ -55,11 +56,13 @@ export default function BlogPostPage() {
 
           {/* Author info */}
           <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" 
+            <div className="relative w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
                 alt={post.author}
-                className="w-full h-full object-cover"
+                fill
+                sizes="48px"
+                className="object-cover"
               />
             </div>
             <div>
@@ -82,11 +85,13 @@ export default function BlogPostPage() {
           </div>
 
           {/* Featured Image */}
-          <div className="my-8 md:my-12 rounded-2xl overflow-hidden">
-            <img 
-              src={post.image.replace('w=600&h=400', 'w=1200&h=600')} 
+          <div className="my-8 md:my-12 rounded-2xl overflow-hidden relative aspect-[2/1]">
+            <Image
+              src={post.image.replace("w=600&h=400", "w=1200&h=600")}
               alt={post.title}
-              className="w-full aspect-[2/1] object-cover"
+              fill
+              sizes="(min-width: 1024px) 896px, 100vw"
+              className="object-cover"
             />
           </div>
 
@@ -155,11 +160,13 @@ export default function BlogPostPage() {
           {/* Author Card */}
           <div className="mt-12 p-6 bg-gray-50 rounded-2xl">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
-                <img 
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" 
+              <div className="relative w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                <Image
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
                   alt={post.author}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="64px"
+                  className="object-cover"
                 />
               </div>
               <div>
@@ -185,11 +192,13 @@ export default function BlogPostPage() {
                 href={`/insikter/${relatedPost.slug}`}
                 className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
               >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img 
-                    src={relatedPost.image} 
+                <div className="aspect-[4/3] overflow-hidden relative">
+                  <Image
+                    src={relatedPost.image}
                     alt={relatedPost.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <div className="p-5">

@@ -1,15 +1,16 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 const logos = [
-  { src: "/67161e62c6b981f635e078f2_ab-karl-hedin-logo.png", alt: "AB Karl Hedin" },
-  { src: "/RMS_Logotyp_2col-scaled-1-2048x760.png", alt: "RMS" },
-  { src: "/varubud-logo.png", alt: "Varubud" },
-  { src: "/imi-go-blue-1200x630-1-1.png", alt: "IMI", className: "scale-150" },
-  { src: "/landrins_bil_eskilstuna_25954_21031215034789_klicket_se.png", alt: "Landrins Bil" },
-  { src: "/207704985-origpic-3b5838.png", alt: "Partner" },
-  { src: "/BiltjL.png", alt: "Biltjänst" },
+  { src: "/67161e62c6b981f635e078f2_ab-karl-hedin-logo.png", alt: "AB Karl Hedin", width: 851, height: 186 },
+  { src: "/RMS_Logotyp_2col-scaled-1-2048x760.png", alt: "RMS", width: 2048, height: 760 },
+  { src: "/varubud-logo.png", alt: "Varubud", width: 300, height: 114 },
+  { src: "/imi-go-blue-1200x630-1-1.png", alt: "IMI", width: 349, height: 447, className: "scale-150" },
+  { src: "/landrins_bil_eskilstuna_25954_21031215034789_klicket_se.png", alt: "Landrins Bil", width: 1249, height: 174 },
+  { src: "/207704985-origpic-3b5838.png", alt: "Partner", width: 994, height: 266 },
+  { src: "/BiltjL.png", alt: "Biltjänst", width: 400, height: 106 },
 ];
 
 export function Logo3() {
@@ -33,22 +34,28 @@ export function Logo3() {
             {/* First set of logos */}
             <div className="flex shrink-0 animate-logo-scroll items-center">
               {logos.map((logo, index) => (
-                <img
+                <Image
                   key={`logo-1-${index}`}
                   className={`mx-12 md:mx-16 max-h-10 max-w-[120px] md:max-w-[150px] shrink-0 object-contain ${logo.className || ''}`}
                   src={logo.src}
                   alt={logo.alt}
+                  width={logo.width}
+                  height={logo.height}
+                  sizes="(min-width: 768px) 150px, 120px"
                 />
               ))}
             </div>
             {/* Duplicate for seamless loop */}
             <div className="flex shrink-0 animate-logo-scroll items-center">
               {logos.map((logo, index) => (
-                <img
+                <Image
                   key={`logo-2-${index}`}
                   className={`mx-12 md:mx-16 max-h-10 max-w-[120px] md:max-w-[150px] shrink-0 object-contain ${logo.className || ''}`}
                   src={logo.src}
                   alt={logo.alt}
+                  width={logo.width}
+                  height={logo.height}
+                  sizes="(min-width: 768px) 150px, 120px"
                 />
               ))}
             </div>

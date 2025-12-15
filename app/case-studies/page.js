@@ -3,6 +3,7 @@
 import { PageLayout } from "../../components/PageLayout";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 const caseStudies = [
   {
@@ -40,11 +41,15 @@ export default function CaseStudiesPage() {
                 className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img 
-                    src={study.image} 
-                    alt={study.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={study.image}
+                      alt={study.title}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
                 </div>
                 <div className="p-6">
                   <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">

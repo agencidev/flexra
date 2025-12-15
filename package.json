@@ -6,26 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
-    "@relume_io/relume-tailwind": "latest",
-    "@relume_io/relume-ui": "latest",
+    "@relume_io/relume-tailwind": "1.3.0",
+    "@relume_io/relume-ui": "1.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.0",
-    "framer-motion": "^11.0.0",
-    "lucide-react": "^0.344.0",
-    "next": "^14.2.0",
+    "framer-motion": "^12.23.26",
+    "lucide-react": "^0.561.0",
+    "next": "^16.0.10",
     "ogl": "^1.0.11",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.18",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.0",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1"
+    "autoprefixer": "^10.4.23",
+    "@eslint/eslintrc": "^3.3.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.0.10",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
   }
 }

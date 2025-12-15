@@ -2,6 +2,7 @@
 
 import { PageLayout } from "../../components/PageLayout";
 import Link from "next/link";
+import Image from "next/image";
 
 const posts = [
   {
@@ -83,11 +84,15 @@ export default function InsikterPage() {
               >
                 <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow h-full">
                   <div className="aspect-[4/3] overflow-hidden">
-                    <img 
-                      src={post.image} 
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                   </div>
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">

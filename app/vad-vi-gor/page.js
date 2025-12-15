@@ -1,6 +1,7 @@
 "use client";
 
 import { PageLayout } from "../../components/PageLayout";
+import Image from "next/image";
 
 const tools = [
   {
@@ -139,9 +140,11 @@ export default function VadViGorPage() {
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 group-hover:bg-gray-100 transition-colors">
-                    <img 
-                      src={tool.logo} 
+                    <Image
+                      src={tool.logo}
                       alt={tool.name}
+                      width={32}
+                      height={32}
                       className="w-8 h-8 object-contain"
                     />
                   </div>
@@ -253,37 +256,86 @@ export default function VadViGorPage() {
           <div className="relative h-[300px] md:h-[350px] max-w-3xl mx-auto">
             {/* Slack */}
             <div className="absolute left-[5%] top-[30%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/slack-new-logo.svg" alt="Slack" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/slack-new-logo.svg"
+                alt="Slack"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
             
             {/* Salesforce */}
             <div className="absolute left-[22%] top-[5%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/salesforce-2.svg" alt="Salesforce" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/salesforce-2.svg"
+                alt="Salesforce"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
             
             {/* Zendesk */}
             <div className="absolute left-[42%] top-[0%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/zendesk-1.svg" alt="Zendesk" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/zendesk-1.svg"
+                alt="Zendesk"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
             
             {/* HubSpot */}
             <div className="absolute right-[10%] top-[10%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/hubspot.svg" alt="HubSpot" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/hubspot.svg"
+                alt="HubSpot"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
             
             {/* WhatsApp */}
             <div className="absolute left-[30%] top-[55%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/whatsapp-icon.svg" alt="WhatsApp" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/whatsapp-icon.svg"
+                alt="WhatsApp"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
             
             {/* Microsoft Teams */}
             <div className="absolute left-[50%] top-[45%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/microsoft-teams-1.svg" alt="Microsoft Teams" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/microsoft-teams-1.svg"
+                alt="Microsoft Teams"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
             
             {/* Google Meet */}
             <div className="absolute right-[5%] top-[40%] w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-              <img src="https://cdn.worldvectorlogo.com/logos/google-meet-icon.svg" alt="Google Meet" className="w-10 h-10 md:w-12 md:h-12" />
+              <Image
+                src="https://cdn.worldvectorlogo.com/logos/google-meet-icon.svg"
+                alt="Google Meet"
+                width={48}
+                height={48}
+                sizes="(min-width: 768px) 48px, 40px"
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
             </div>
           </div>
 

@@ -3,6 +3,7 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 export function Layout442() {
   return (
@@ -27,11 +28,14 @@ export function Layout442() {
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 z-0">
-        <img
+      <div className="absolute inset-0 z-0 relative">
+        <Image
           src="/477574545_952501333656469_9057813305953097372_n.jpg"
-          className="size-full object-cover"
           alt="Bakgrundsbild"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-black/50" />
       </div>

@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Vad vi gör", href: "/vad-vi-gor" },
@@ -23,14 +24,32 @@ export function Footer1() {
             <div className="flex flex-col">
               {/* Team avatars */}
               <div className="flex -space-x-2 mb-6">
-                <div className="w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="" className="w-full h-full object-cover" />
+                <div className="relative w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
+                  <Image
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+                    alt=""
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                  />
                 </div>
-                <div className="w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="" className="w-full h-full object-cover" />
+                <div className="relative w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
+                  <Image
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
+                    alt=""
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                  />
                 </div>
-                <div className="w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="" className="w-full h-full object-cover" />
+                <div className="relative w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
+                  <Image
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+                    alt=""
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                  />
                 </div>
               </div>
               
