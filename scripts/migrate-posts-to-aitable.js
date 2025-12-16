@@ -1,18 +1,24 @@
-"use client";
-
-import { BlogCarousel } from "./blocks/BlogCarousel";
+#!/usr/bin/env node
 
 /**
- * Blog37 - Legacy wrapper för BlogCarousel
+ * Migreringsscript: Flytta blogginlägg till AITable
  *
- * Denna komponent är en wrapper som behåller bakåtkompatibilitet
- * medan vi migrerar till AITable.
+ * Användning:
+ *   node scripts/migrate-posts-to-aitable.js
  *
- * @deprecated Använd BlogCarousel direkt istället med posts från AITable
+ * Kräver att följande miljövariabler är satta:
+ *   - AITABLE_API_TOKEN
+ *   - AITABLE_FLEXRA_BLOG_ID
  */
 
-// Behåll legacy posts för bakåtkompatibilitet under migrering
-export const posts = [
+import "dotenv/config";
+
+const AITABLE_BASE_URL = "https://aitable.ai/fusion/v1";
+const AITABLE_TOKEN = process.env.AITABLE_API_TOKEN;
+const BLOG_DATASHEET_ID = process.env.AITABLE_FLEXRA_BLOG_ID;
+
+// Befintliga inlägg från Blog37.jsx
+const posts = [
   {
     slug: "designa-foretagskulturer",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop",
@@ -22,6 +28,7 @@ export const posts = [
     description: "Utforska hur du sätter medarbetarna i centrum av din företagskultur för att driva framgång och lojalitet.",
     date: "12 dec 2025",
     author: "Erik Lindqvist",
+    published: true,
     content: `Att designa en stark företagskultur handlar om mer än att bara sätta upp värderingar på väggen. Det handlar om att skapa en miljö där medarbetarna känner sig sedda, hörda och uppskattade.
 
 I denna artikel utforskar vi hur du kan sätta medarbetarna i centrum av din företagskultur för att driva framgång och lojalitet. Vi tittar på konkreta strategier och verktyg som hjälper dig att bygga en kultur som attraherar och behåller talanger.
@@ -50,6 +57,7 @@ Att bygga en stark företagskultur tar tid, men det är en investering som betal
     description: "Lär dig hur du framgångsrikt hanterar en arbetsstyrka som blandar kontor och distansarbete.",
     date: "10 dec 2025",
     author: "Anna Bergström",
+    published: true,
     content: `Hybridarbete har blivit den nya normen för många organisationer. Men att leda team som arbetar både på kontoret och på distans kräver nya färdigheter och verktyg.
 
 ## Utmaningar med hybridarbete
@@ -78,6 +86,7 @@ Se till att distansarbetare inte hamnar utanför viktiga diskussioner och beslut
     description: "Upptäck hur automation kan förenkla dagliga operationer och öka den övergripande produktiviteten.",
     date: "8 dec 2025",
     author: "Marcus Holm",
+    published: true,
     content: `Automation är nyckeln till att frigöra tid för det som verkligen spelar roll. Genom att automatisera repetitiva uppgifter kan ditt team fokusera på strategiskt arbete.
 
 ## Identifiera rätt processer
@@ -108,6 +117,7 @@ Följ upp effekten av dina automationer genom att mäta tidsbesparingar och kval
     description: "Se hur artificiell intelligens blir en naturlig del av moderna arbetsplatser.",
     date: "5 dec 2025",
     author: "Erik Lindqvist",
+    published: true,
     content: `AI är inte längre science fiction - det är ett verktyg som redan används på arbetsplatser världen över. Men hur kan du börja använda AI i din organisation?
 
 ## Praktiska AI-användningsområden
@@ -137,6 +147,7 @@ Chatbots och virtuella assistenter kan hantera rutinfrågor dygnet runt.
     description: "Hur teknologi formar morgondagens kontor och arbetsmiljöer.",
     date: "3 dec 2025",
     author: "Anna Bergström",
+    published: true,
     content: `Arbetsplatsen genomgår en transformation. Teknologi, förändrade förväntningar och nya arbetssätt formar hur vi kommer att arbeta i framtiden.
 
 ## Trender att hålla koll på
@@ -163,6 +174,7 @@ Börja redan nu med att experimentera med nya arbetssätt och teknologier för a
     description: "Använd data för att fatta bättre beslut och driva tillväxt i din organisation.",
     date: "1 dec 2025",
     author: "Marcus Holm",
+    published: true,
     content: `Data är den nya oljan, sägs det. Men det räcker inte att samla data - du måste också kunna använda den för att fatta bättre beslut.
 
 ## Bygg en datadriven kultur
@@ -184,29 +196,76 @@ Skapa processer där data är en naturlig del av beslutsfattandet.
   }
 ];
 
-/**
- * Blog37 komponent
- *
- * @deprecated Använd BlogCarousel med posts från AITable istället
- * @example
- * // Ny rekommenderad användning:
- * import { BlogCarousel } from "@/components/blocks";
- * import { getAllPosts } from "@/lib/posts";
- *
- * const posts = await getAllPosts({ limit: 6 });
- * <BlogCarousel posts={posts} />
- */
-export function Blog37({ customPosts }) {
-  // Använd custom posts om tillgängliga, annars fallback till legacy posts
-  const displayPosts = customPosts || posts;
+async function createRecords(records) {
+  const url = `${AITABLE_BASE_URL}/datasheets/${BLOG_DATASHEET_ID}/records`;
 
-  return (
-    <BlogCarousel
-      posts={displayPosts}
-      title="Senaste insikter och trender"
-      badge="Blogg och artiklar"
-    />
-  );
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${AITABLE_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      records: records.map(fields => ({ fields }))
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(`AITable API error: ${response.status} - ${JSON.stringify(error)}`);
+  }
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(`AITable error: ${data.message || "Unknown error"}`);
+  }
+
+  return data.data?.records || [];
 }
 
-export default Blog37;
+async function migrate() {
+  console.log("🚀 Startar migrering av blogginlägg till AITable...\n");
+
+  if (!AITABLE_TOKEN) {
+    console.error("❌ AITABLE_API_TOKEN är inte satt i .env.local");
+    process.exit(1);
+  }
+
+  if (!BLOG_DATASHEET_ID) {
+    console.error("❌ AITABLE_FLEXRA_BLOG_ID är inte satt i .env.local");
+    process.exit(1);
+  }
+
+  console.log(`📊 Datasheet ID: ${BLOG_DATASHEET_ID}`);
+  console.log(`📝 Antal inlägg att migrera: ${posts.length}\n`);
+
+  // AITable tillåter max 10 records per request
+  const batchSize = 10;
+  let totalCreated = 0;
+
+  for (let i = 0; i < posts.length; i += batchSize) {
+    const batch = posts.slice(i, i + batchSize);
+    console.log(`📦 Migrerar batch ${Math.floor(i / batchSize) + 1}...`);
+
+    try {
+      const created = await createRecords(batch);
+      totalCreated += created.length;
+
+      for (const record of created) {
+        console.log(`   ✅ ${record.fields.title}`);
+      }
+    } catch (error) {
+      console.error(`   ❌ Fel vid migrering:`, error.message);
+    }
+
+    // Vänta lite mellan batches för att respektera rate limits
+    if (i + batchSize < posts.length) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  }
+
+  console.log(`\n✨ Migrering klar! ${totalCreated} inlägg skapade i AITable.`);
+}
+
+migrate().catch(console.error);

@@ -1,36 +1,58 @@
-"use client";
-
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { ArrowLeft, Share2, Bookmark, Linkedin, Twitter } from "lucide-react";
+import { notFound } from "next/navigation";
+import { Share2, Bookmark, Link2 } from "lucide-react";
 import { Navbar1 } from "../../../components/Navbar1";
 import { Footer1 } from "../../../components/Footer1";
-import { posts } from "../../../components/Blog37";
+import { getPostBySlug, getRelatedPosts, getAllPosts } from "../../../lib/posts";
 
-export default function BlogPostPage() {
-  const params = useParams();
-  const post = posts.find((p) => p.slug === params.slug);
+// Generera metadata dynamiskt
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Artikeln hittades inte</h1>
-          <Link href="/insikter" className="text-gray-600 hover:text-gray-900">
-            ← Tillbaka till insikter
-          </Link>
-        </div>
-      </div>
-    );
+    return {
+      title: "Artikel hittades inte | Flexra"
+    };
   }
 
-  const relatedPosts = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
+  return {
+    title: `${post.title} | Flexra`,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      images: post.image ? [{ url: post.image }] : []
+    }
+  };
+}
+
+// Generera statiska paths för alla publicerade inlägg
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+
+  return posts.map((post) => ({
+    slug: post.slug
+  }));
+}
+
+// Revalidera varje timme
+export const revalidate = 3600;
+
+export default async function BlogPostPage({ params }) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const relatedPosts = await getRelatedPosts(slug, 3);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header with dark background */}
+      {/* Header med mörk bakgrund */}
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
         <Navbar1 />
       </div>
@@ -46,15 +68,15 @@ export default function BlogPostPage() {
         </div>
       </div>
 
-      {/* Article Header */}
+      {/* Artikelns header */}
       <article className="px-[5%] py-8 md:py-12">
         <div className="container max-w-4xl mx-auto">
-          {/* Title */}
+          {/* Titel */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
             {post.title}
           </h1>
 
-          {/* Author info */}
+          {/* Författarinfo */}
           <div className="flex items-center gap-4 mb-8">
             <div className="relative w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
               <Image
@@ -71,7 +93,7 @@ export default function BlogPostPage() {
             </div>
           </div>
 
-          {/* Share buttons */}
+          {/* Dela-knappar */}
           <div className="flex items-center gap-3 pb-8 border-b border-gray-200">
             <button className="p-2 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
               <Share2 className="w-5 h-5 text-gray-600" />
@@ -80,57 +102,59 @@ export default function BlogPostPage() {
               <Bookmark className="w-5 h-5 text-gray-600" />
             </button>
             <button className="p-2 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
-              <Linkedin className="w-5 h-5 text-gray-600" />
+              <Link2 className="w-5 h-5 text-gray-600" />
             </button>
           </div>
 
-          {/* Featured Image */}
-          <div className="my-8 md:my-12 rounded-2xl overflow-hidden relative aspect-[2/1]">
-            <Image
-              src={post.image.replace("w=600&h=400", "w=1200&h=600")}
-              alt={post.title}
-              fill
-              sizes="(min-width: 1024px) 896px, 100vw"
-              className="object-cover"
-            />
-          </div>
+          {/* Featured-bild */}
+          {post.image && (
+            <div className="my-8 md:my-12 rounded-2xl overflow-hidden relative aspect-[2/1]">
+              <Image
+                src={post.image.replace("w=600&h=400", "w=1200&h=600")}
+                alt={post.title}
+                fill
+                sizes="(min-width: 1024px) 896px, 100vw"
+                className="object-cover"
+              />
+            </div>
+          )}
 
-          {/* Article Content */}
+          {/* Artikelinnehåll */}
           <div className="prose prose-lg max-w-none">
-            {post.content.split('\n\n').map((paragraph, index) => {
-              if (paragraph.startsWith('## ')) {
+            {post.content && post.content.split("\n\n").map((paragraph, index) => {
+              if (paragraph.startsWith("## ")) {
                 return (
                   <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
-                    {paragraph.replace('## ', '')}
+                    {paragraph.replace("## ", "")}
                   </h2>
                 );
               }
-              if (paragraph.startsWith('### ')) {
+              if (paragraph.startsWith("### ")) {
                 return (
                   <h3 key={index} className="text-xl font-semibold mt-8 mb-3">
-                    {paragraph.replace('### ', '')}
+                    {paragraph.replace("### ", "")}
                   </h3>
                 );
               }
-              if (paragraph.startsWith('- ')) {
-                const items = paragraph.split('\n').filter(item => item.startsWith('- '));
+              if (paragraph.startsWith("- ")) {
+                const items = paragraph.split("\n").filter(item => item.startsWith("- "));
                 return (
                   <ul key={index} className="list-disc pl-6 my-4 space-y-2">
                     {items.map((item, i) => (
                       <li key={i} className="text-gray-600">
-                        {item.replace('- ', '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                        {item.replace("- ", "")}
                       </li>
                     ))}
                   </ul>
                 );
               }
               if (paragraph.match(/^\d\. /)) {
-                const items = paragraph.split('\n').filter(item => item.match(/^\d\. /));
+                const items = paragraph.split("\n").filter(item => item.match(/^\d\. /));
                 return (
                   <ol key={index} className="list-decimal pl-6 my-4 space-y-2">
                     {items.map((item, i) => (
                       <li key={i} className="text-gray-600">
-                        {item.replace(/^\d\. /, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                        {item.replace(/^\d\. /, "")}
                       </li>
                     ))}
                   </ol>
@@ -144,7 +168,7 @@ export default function BlogPostPage() {
             })}
           </div>
 
-          {/* Tags */}
+          {/* Taggar */}
           <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-gray-200">
             <span className="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700">
               {post.category}
@@ -157,7 +181,7 @@ export default function BlogPostPage() {
             </span>
           </div>
 
-          {/* Author Card */}
+          {/* Författarkort */}
           <div className="mt-12 p-6 bg-gray-50 rounded-2xl">
             <div className="flex items-start gap-4">
               <div className="relative w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
@@ -172,7 +196,7 @@ export default function BlogPostPage() {
               <div>
                 <p className="font-semibold text-lg">{post.author}</p>
                 <p className="text-gray-600 text-sm mt-1">
-                  Expert inom AI och automation med över 10 års erfarenhet av att hjälpa 
+                  Expert inom AI och automation med över 10 års erfarenhet av att hjälpa
                   företag att effektivisera sina processer.
                 </p>
               </div>
@@ -181,39 +205,41 @@ export default function BlogPostPage() {
         </div>
       </article>
 
-      {/* Related Posts */}
-      <section className="px-[5%] py-16 bg-gray-50">
-        <div className="container">
-          <h2 className="text-2xl md:text-3xl font-bold mb-8">Relaterade artiklar</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {relatedPosts.map((relatedPost, index) => (
-              <Link 
-                key={index}
-                href={`/insikter/${relatedPost.slug}`}
-                className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
-              >
-                <div className="aspect-[4/3] overflow-hidden relative">
-                  <Image
-                    src={relatedPost.image}
-                    alt={relatedPost.title}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-5">
-                  <span className={`text-xs font-medium px-3 py-1 rounded-full ${relatedPost.categoryColor}`}>
-                    {relatedPost.category}
-                  </span>
-                  <h3 className="text-lg font-semibold mt-3 group-hover:text-gray-600 transition-colors">
-                    {relatedPost.title}
-                  </h3>
-                </div>
-              </Link>
-            ))}
+      {/* Relaterade inlägg */}
+      {relatedPosts.length > 0 && (
+        <section className="px-[5%] py-16 bg-gray-50">
+          <div className="container">
+            <h2 className="text-2xl md:text-3xl font-bold mb-8">Relaterade artiklar</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {relatedPosts.map((relatedPost, index) => (
+                <Link
+                  key={relatedPost.slug || index}
+                  href={`/insikter/${relatedPost.slug}`}
+                  className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
+                >
+                  <div className="aspect-[4/3] overflow-hidden relative">
+                    <Image
+                      src={relatedPost.image || "/placeholder.jpg"}
+                      alt={relatedPost.title}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${relatedPost.categoryColor || "bg-pink-100"}`}>
+                      {relatedPost.category}
+                    </span>
+                    <h3 className="text-lg font-semibold mt-3 group-hover:text-gray-600 transition-colors">
+                      {relatedPost.title}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <Footer1 />
     </div>

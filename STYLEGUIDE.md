@@ -1,6 +1,6 @@
 # Flexra Styleguide
 
-> **Version:** 2.0
+> **Version:** 2.4
 > **Senast uppdaterad:** December 2025
 > **Baserad på:** Förstasidan och befintliga komponenter
 
@@ -24,6 +24,7 @@ Denna styleguide fungerar som regelverk för hela Flexra-webbplatsen. Följ dess
 12. [Nya komponenter](#12-nya-komponenter)
 13. [Återanvändbara Block-komponenter](#13-återanvändbara-block-komponenter)
 14. [Mobilanpassning](#14-mobilanpassning)
+15. [Blogg-system & API](#15-blogg-system--api)
 
 ---
 
@@ -2263,6 +2264,270 @@ Alla block-komponenter i `/components/blocks/` MÅSTE:
 
 ---
 
+## 15. Blogg-system & API
+
+### 15.1 Arkitektur
+
+Blogg-systemet använder AITable som databas med följande struktur:
+
+```
+/lib/
+  aitable.js        # AITable API-klient
+  posts.js          # Posts-hantering (CRUD)
+
+/components/blocks/
+  BlogGrid.jsx      # Grid-layout för blogg
+  BlogCarousel.jsx  # Karusell-layout
+
+/app/
+  insikter/
+    page.js         # Listar alla inlägg
+    [slug]/
+      page.js       # Enskilt inlägg
+  api/
+    posts/
+      route.js      # GET, POST
+      [slug]/
+        route.js    # GET, PUT, DELETE
+```
+
+### 15.2 BlogGrid komponent
+
+Återanvändbar grid för att visa blogginlägg.
+
+**Props:**
+| Prop | Typ | Default | Beskrivning |
+|------|-----|---------|-------------|
+| `posts` | `Array` | `[]` | Array med post-objekt |
+| `columns` | `1\|2\|3` | `3` | Antal kolumner |
+| `limit` | `number` | - | Max antal inlägg |
+| `showAuthor` | `boolean` | `true` | Visa författare |
+| `showDate` | `boolean` | `true` | Visa datum |
+| `showDescription` | `boolean` | `true` | Visa beskrivning |
+| `background` | `"white"\|"gray"` | `"white"` | Bakgrundsfärg |
+| `title` | `string` | - | Valfri rubrik |
+| `subtitle` | `string` | - | Valfri underrubrik |
+| `badge` | `string` | - | Valfri badge |
+
+**Användning:**
+```jsx
+import { BlogGrid } from "@/components/blocks";
+import { getAllPosts } from "@/lib/posts";
+
+const posts = await getAllPosts();
+
+<BlogGrid
+  posts={posts}
+  columns={3}
+  limit={6}
+  showAuthor={true}
+/>
+```
+
+### 15.3 BlogCarousel komponent
+
+Horisontellt scrollande karusell för blogg.
+
+**Props:**
+| Prop | Typ | Default | Beskrivning |
+|------|-----|---------|-------------|
+| `posts` | `Array` | `[]` | Array med post-objekt |
+| `title` | `string` | `"Senaste insikter..."` | Rubrik |
+| `badge` | `string` | `"Blogg och artiklar"` | Badge-text |
+| `background` | `"white"\|"gray"` | `"white"` | Bakgrundsfärg |
+
+**Användning:**
+```jsx
+import { BlogCarousel } from "@/components/blocks";
+
+<BlogCarousel
+  posts={posts}
+  title="Senaste nytt"
+  badge="Nyheter"
+/>
+```
+
+### 15.4 Post-objekt struktur
+
+```typescript
+interface Post {
+  id: string;           // AITable record ID
+  slug: string;         // URL-slug (unik)
+  title: string;        // Rubrik
+  description: string;  // Kort beskrivning
+  content: string;      // Markdown-innehåll
+  image: string;        // Bild-URL
+  category: string;     // Kategori (Insikter, Nyheter, etc.)
+  categoryColor: string; // Tailwind-klass (bg-pink-100, etc.)
+  author: string;       // Författarnamn
+  date: string;         // Formaterat datum (ex: "16 dec 2025")
+  published: boolean;   // Publicerad eller ej
+}
+```
+
+### 15.5 Posts-funktioner (/lib/posts.js)
+
+```javascript
+import { getAllPosts, getPostBySlug, getRelatedPosts, createPost } from "@/lib/posts";
+
+// Hämta alla publicerade inlägg
+const posts = await getAllPosts();
+const posts = await getAllPosts({ limit: 6 });
+const posts = await getAllPosts({ includeUnpublished: true });
+
+// Hämta enskilt inlägg
+const post = await getPostBySlug("min-artikel");
+
+// Hämta relaterade inlägg
+const related = await getRelatedPosts("current-slug", 3);
+
+// Skapa nytt inlägg
+const newPost = await createPost({
+  title: "Min nya artikel",
+  description: "Kort beskrivning",
+  content: "Markdown-innehåll...",
+  category: "Insikter",
+  author: "Namn",
+  published: true
+});
+```
+
+### 15.6 API-endpoints
+
+#### GET /api/posts
+Hämtar alla publicerade inlägg.
+
+**Query params:**
+- `limit` - Max antal inlägg
+- `includeUnpublished=true` - Inkludera opublicerade (kräver API-nyckel)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [...posts],
+  "count": 10
+}
+```
+
+#### POST /api/posts
+Skapar nytt inlägg. Kräver API-nyckel.
+
+**Headers:**
+```
+x-api-key: din-api-nyckel
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "title": "Rubrik (obligatorisk)",
+  "slug": "auto-genereras-om-utelämnad",
+  "description": "Kort beskrivning",
+  "content": "Markdown-innehåll",
+  "image": "https://...",
+  "category": "Insikter",
+  "categoryColor": "bg-pink-100",
+  "author": "Namn",
+  "published": true
+}
+```
+
+#### GET /api/posts/[slug]
+Hämtar enskilt inlägg.
+
+#### PUT /api/posts/[slug]
+Uppdaterar inlägg. Kräver API-nyckel.
+
+#### DELETE /api/posts/[slug]
+Tar bort inlägg. Kräver API-nyckel.
+
+### 15.7 n8n Integration
+
+#### Direkt till AITable
+```json
+{
+  "method": "POST",
+  "url": "https://aitable.ai/fusion/v1/datasheets/{DATASHEET_ID}/records",
+  "headers": {
+    "Authorization": "Bearer {{$env.AITABLE_API_TOKEN}}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "records": [{
+      "fields": {
+        "slug": "nytt-inlagg",
+        "title": "Nytt inlägg",
+        "description": "Beskrivning...",
+        "content": "Markdown...",
+        "category": "Insikter",
+        "categoryColor": "bg-pink-100",
+        "author": "AI",
+        "date": "16 dec 2025",
+        "published": true
+      }
+    }]
+  }
+}
+```
+
+#### Via Flexra API
+```json
+{
+  "method": "POST",
+  "url": "https://flexra.se/api/posts",
+  "headers": {
+    "Content-Type": "application/json",
+    "x-api-key": "{{$env.POSTS_API_KEY}}"
+  },
+  "body": {
+    "title": "Nytt inlägg",
+    "description": "Beskrivning...",
+    "content": "Markdown...",
+    "category": "Insikter",
+    "author": "AI"
+  }
+}
+```
+
+### 15.8 AITable datasheet-fält
+
+| Fält | Typ | Beskrivning |
+|------|-----|-------------|
+| `slug` | Text | URL-slug (unik) |
+| `title` | Text | Rubrik |
+| `description` | Text | Kort beskrivning |
+| `content` | LongText | Markdown-innehåll |
+| `image` | URL | Bild-URL |
+| `category` | SingleSelect | Insikter, Nyheter |
+| `categoryColor` | SingleSelect | bg-pink-100, bg-yellow-100, bg-lime-100 |
+| `author` | Text | Författarnamn |
+| `date` | Text | Formaterat datum |
+| `published` | Checkbox | Publicerad |
+
+### 15.9 Miljövariabler
+
+```env
+# AITable
+AITABLE_API_TOKEN=xxx
+AITABLE_SPACE_ID=xxx
+AITABLE_FLEXRA_BLOG_ID=xxx
+
+# API Authentication
+POSTS_API_KEY=xxx
+```
+
+### 15.10 Migrera befintliga inlägg
+
+Kör migreringsscriptet för att flytta hårdkodade inlägg till AITable:
+
+```bash
+node scripts/migrate-posts-to-aitable.js
+```
+
+---
+
 ## Snabbreferens
 
 ### Tailwind-klasser att använda
@@ -2303,6 +2568,7 @@ style={{ backgroundColor: '#ecfccb' }}  // Lime
 
 | Version | Datum | Ändringar |
 |---------|-------|-----------|
+| 2.4 | Dec 2025 | Lagt till: Blogg-system & API (15) - AITable, BlogGrid, BlogCarousel, API-routes för n8n |
 | 2.3 | Dec 2025 | Lagt till: Mobilanpassning (14) - komplett guide för responsiv design |
 | 2.2 | Dec 2025 | Utökad sektion 13: index.js, planerade block-komponenter, namnkonventioner |
 | 2.1 | Dec 2025 | Lagt till: Återanvändbara Block-komponenter (13), FAQ Block |

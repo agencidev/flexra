@@ -10,10 +10,58 @@ import { FAQ } from "../../components/blocks/FAQ";
 
 const tools = [
   {
+    name: "OpenAI",
+    logo: "/logos/openai.svg",
+    url: "https://openai.com",
+    description: "Kraftfulla AI-modeller för textgenerering, analys och intelligenta assistenter."
+  },
+  {
+    name: "Claude",
+    logo: "/logos/anthropic.webp",
+    url: "https://anthropic.com",
+    description: "Avancerad AI-assistent för intelligent automation och beslutstöd."
+  },
+  {
+    name: "Gemini",
+    logo: "/logos/gemini.svg",
+    url: "https://gemini.google.com",
+    description: "Googles multimodala AI-modell för text, bild och kodgenerering."
+  },
+  {
+    name: "Perplexity",
+    logo: "/logos/perplexity.svg",
+    url: "https://perplexity.ai",
+    description: "AI-driven sökmotor som ger direkta svar med källhänvisningar."
+  },
+  {
+    name: "n8n",
+    logo: "/logos/n8n.svg",
+    url: "https://n8n.io",
+    description: "Open source-automation som kopplar ihop appar och bygger komplexa workflows."
+  },
+  {
+    name: "Power Automate",
+    logo: "/logos/powerautomate.svg",
+    url: "https://powerautomate.microsoft.com",
+    description: "Microsofts automationsplattform för att effektivisera repetitiva uppgifter."
+  },
+  {
+    name: "Make",
+    logo: "/logos/make.svg",
+    url: "https://make.com",
+    description: "Visuell automationsplattform för att bygga och automatisera arbetsflöden."
+  },
+  {
+    name: "LangChain",
+    logo: "/logos/langchain.svg",
+    url: "https://langchain.com",
+    description: "Ramverk för att bygga applikationer drivna av stora språkmodeller."
+  },
+  {
     name: "Vercel",
     logo: "/logos/vercel.webp",
     url: "https://vercel.com",
-    description: "Snabb och skalbar hosting för moderna webbapplikationer med automatisk deployment."
+    description: "Snabb och skalbar hosting för moderna webbapplikationer."
   },
   {
     name: "Supabase",
@@ -22,22 +70,16 @@ const tools = [
     description: "Open source-databas med realtidsfunktioner och inbyggd autentisering."
   },
   {
-    name: "Next.js",
-    logo: "/logos/nextjs.svg",
-    url: "https://nextjs.org",
-    description: "React-ramverk för produktionsklara applikationer med optimal prestanda."
+    name: "Cursor",
+    logo: "/logos/cursor.svg",
+    url: "https://cursor.com",
+    description: "AI-driven kodredigerare som accelererar utveckling med intelligent assistans."
   },
   {
-    name: "Tailwind CSS",
-    logo: "/logos/tailwind.svg",
-    url: "https://tailwindcss.com",
-    description: "Utility-first CSS för snabb och konsekvent design utan att lämna HTML."
-  },
-  {
-    name: "Claude",
-    logo: "/logos/anthropic.webp",
-    url: "https://anthropic.com",
-    description: "Avancerad AI-assistent för intelligent automation och beslutstöd."
+    name: "Windsurf",
+    logo: "/logos/windsurf.svg",
+    url: "https://codeium.com/windsurf",
+    description: "AI-kodredigerare med agentiskt workflow för snabbare utveckling."
   }
 ];
 

@@ -15,6 +15,10 @@
 // FAQ Section
 export { FAQ } from "./FAQ";
 
+// Blog Sections
+export { BlogGrid } from "./BlogGrid";
+export { BlogCarousel } from "./BlogCarousel";
+
 // Planerade komponenter (uncomment när de skapas):
 // export { ContactForm } from "./ContactForm";
 // export { Testimonials } from "./Testimonials";
