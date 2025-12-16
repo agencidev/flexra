@@ -19,8 +19,11 @@ export { FAQ } from "./FAQ";
 export { BlogGrid } from "./BlogGrid";
 export { BlogCarousel } from "./BlogCarousel";
 
+// Contact Forms
+export { ContactForm } from "./ContactForm";
+export { ContactFormWizard } from "./ContactFormWizard";
+
 // Planerade komponenter (uncomment när de skapas):
-// export { ContactForm } from "./ContactForm";
 // export { Testimonials } from "./Testimonials";
 // export { Stats } from "./Stats";
 // export { CTA } from "./CTA";

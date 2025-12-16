@@ -26,7 +26,10 @@ function validateApiKey(request) {
 export async function GET(request, { params }) {
   try {
     const { slug } = await params;
-    const post = await getPostBySlug(slug);
+    const { searchParams } = new URL(request.url);
+    const company = searchParams.get("company") || "FLEXRA";
+
+    const post = await getPostBySlug(slug, company);
 
     if (!post) {
       return NextResponse.json(
@@ -60,7 +63,10 @@ export async function PUT(request, { params }) {
     }
 
     const { slug } = await params;
-    const post = await getPostBySlug(slug);
+    const body = await request.json();
+    const company = body.company || "FLEXRA";
+
+    const post = await getPostBySlug(slug, company);
 
     if (!post) {
       return NextResponse.json(
@@ -68,8 +74,6 @@ export async function PUT(request, { params }) {
         { status: 404 }
       );
     }
-
-    const body = await request.json();
 
     // Uppdatera inlägg
     const updatedPost = await updatePost(post.id, {
@@ -82,7 +86,16 @@ export async function PUT(request, { params }) {
       categoryColor: body.categoryColor,
       author: body.author,
       date: body.date,
-      published: body.published
+      published: body.published,
+      company: body.company,
+      // SEO-fält
+      metaTitle: body.metaTitle,
+      metaDescription: body.metaDescription,
+      keywords: body.keywords,
+      canonicalUrl: body.canonicalUrl,
+      noIndex: body.noIndex,
+      // Bild alt-text
+      imageAlt: body.imageAlt
     });
 
     return NextResponse.json({
@@ -111,7 +124,10 @@ export async function DELETE(request, { params }) {
     }
 
     const { slug } = await params;
-    const post = await getPostBySlug(slug);
+    const { searchParams } = new URL(request.url);
+    const company = searchParams.get("company") || "FLEXRA";
+
+    const post = await getPostBySlug(slug, company);
 
     if (!post) {
       return NextResponse.json(

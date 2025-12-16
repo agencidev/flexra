@@ -109,8 +109,8 @@ export function BlogCarousel({
                     <div className="p-4 pb-0">
                       <div className="rounded-2xl overflow-hidden relative aspect-[4/3]">
                         <Image
-                          src={post.image || "/placeholder.jpg"}
-                          alt={post.title}
+                          src={post.image || "/blog/placeholder.jpg"}
+                          alt={post.imageAlt || post.title}
                           fill
                           sizes="(min-width: 1024px) 380px, 320px"
                           className="object-cover group-hover:scale-105 transition-transform duration-300"

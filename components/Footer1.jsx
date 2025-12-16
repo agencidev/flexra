@@ -11,6 +11,8 @@ const navLinks = [
   { label: "Case studies", href: "/case-studies" },
   { label: "Insikter", href: "/insikter" },
   { label: "Villkor", href: "/villkor" },
+  { label: "Integritetspolicy", href: "/integritetspolicy" },
+  { label: "Cookies", href: "/cookies" },
 ];
 
 export function Footer1() {

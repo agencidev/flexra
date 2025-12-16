@@ -27,6 +27,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const limit = searchParams.get("limit");
     const includeUnpublished = searchParams.get("includeUnpublished") === "true";
+    const company = searchParams.get("company") || "FLEXRA";
 
     // Kräv API-nyckel för att se opublicerade inlägg
     if (includeUnpublished && !validateApiKey(request)) {
@@ -38,7 +39,8 @@ export async function GET(request) {
 
     const posts = await getAllPosts({
       limit: limit ? parseInt(limit, 10) : undefined,
-      includeUnpublished
+      includeUnpublished,
+      company
     });
 
     return NextResponse.json({
@@ -87,7 +89,16 @@ export async function POST(request) {
       categoryColor: body.categoryColor,
       author: body.author,
       date: body.date,
-      published: body.published ?? false
+      published: body.published ?? false,
+      company: body.company || "FLEXRA",
+      // SEO-fält
+      metaTitle: body.metaTitle,
+      metaDescription: body.metaDescription,
+      keywords: body.keywords,
+      canonicalUrl: body.canonicalUrl,
+      noIndex: body.noIndex,
+      // Bild alt-text
+      imageAlt: body.imageAlt
     });
 
     return NextResponse.json({

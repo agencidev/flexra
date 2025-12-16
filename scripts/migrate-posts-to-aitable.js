@@ -11,11 +11,25 @@
  *   - AITABLE_FLEXRA_BLOG_ID
  */
 
-import "dotenv/config";
+import { readFileSync } from "fs";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+
+// Ladda .env.local manuellt
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const envPath = resolve(__dirname, "..", ".env.local");
+const envContent = readFileSync(envPath, "utf-8");
+const envVars = {};
+envContent.split("\n").forEach(line => {
+  const match = line.match(/^([^#=]+)=(.*)$/);
+  if (match) {
+    envVars[match[1].trim()] = match[2].trim();
+  }
+});
 
 const AITABLE_BASE_URL = "https://aitable.ai/fusion/v1";
-const AITABLE_TOKEN = process.env.AITABLE_API_TOKEN;
-const BLOG_DATASHEET_ID = process.env.AITABLE_FLEXRA_BLOG_ID;
+const AITABLE_TOKEN = envVars.AITABLE_API_TOKEN;
+const BLOG_DATASHEET_ID = envVars.AITABLE_FLEXRA_BLOG_ID;
 
 // Befintliga inlägg från Blog37.jsx
 const posts = [

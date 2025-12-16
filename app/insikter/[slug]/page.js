@@ -6,24 +6,188 @@ import { Navbar1 } from "../../../components/Navbar1";
 import { Footer1 } from "../../../components/Footer1";
 import { getPostBySlug, getRelatedPosts, getAllPosts } from "../../../lib/posts";
 
-// Generera metadata dynamiskt
+/**
+ * Enkel markdown-parser för blogginlägg
+ * Hanterar: h2, h3, listor, fetstil, och paragrafer
+ */
+function parseMarkdown(content) {
+  if (!content) return null;
+
+  const elements = [];
+  // Dela först på rader för att hantera varje rad separat
+  const lines = content.split("\n");
+  let currentList = [];
+  let listType = null; // "ul" eller "ol"
+  let currentParagraph = [];
+  let elementIndex = 0;
+
+  const flushParagraph = () => {
+    if (currentParagraph.length > 0) {
+      const text = currentParagraph.join(" ").trim();
+      if (text) {
+        elements.push(
+          <p key={elementIndex++} className="text-gray-600 leading-relaxed my-4">
+            {parseInlineMarkdown(text)}
+          </p>
+        );
+      }
+      currentParagraph = [];
+    }
+  };
+
+  const flushList = () => {
+    if (currentList.length > 0) {
+      if (listType === "ul") {
+        elements.push(
+          <ul key={elementIndex++} className="list-disc pl-6 my-4 space-y-2">
+            {currentList.map((item, i) => (
+              <li key={i} className="text-gray-600">{parseInlineMarkdown(item)}</li>
+            ))}
+          </ul>
+        );
+      } else {
+        elements.push(
+          <ol key={elementIndex++} className="list-decimal pl-6 my-4 space-y-2">
+            {currentList.map((item, i) => (
+              <li key={i} className="text-gray-600">{parseInlineMarkdown(item)}</li>
+            ))}
+          </ol>
+        );
+      }
+      currentList = [];
+      listType = null;
+    }
+  };
+
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+
+    // Tom rad - avsluta paragraf
+    if (trimmedLine === "") {
+      flushList();
+      flushParagraph();
+      continue;
+    }
+
+    // H2 rubrik
+    if (trimmedLine.startsWith("## ")) {
+      flushList();
+      flushParagraph();
+      elements.push(
+        <h2 key={elementIndex++} className="mt-10 mb-4">
+          {trimmedLine.replace("## ", "")}
+        </h2>
+      );
+      continue;
+    }
+
+    // H3 rubrik
+    if (trimmedLine.startsWith("### ")) {
+      flushList();
+      flushParagraph();
+      elements.push(
+        <h3 key={elementIndex++} className="mt-8 mb-3">
+          {trimmedLine.replace("### ", "")}
+        </h3>
+      );
+      continue;
+    }
+
+    // Oordnad lista
+    if (trimmedLine.startsWith("- ")) {
+      flushParagraph();
+      if (listType !== "ul") {
+        flushList();
+        listType = "ul";
+      }
+      currentList.push(trimmedLine.replace("- ", ""));
+      continue;
+    }
+
+    // Ordnad lista
+    if (trimmedLine.match(/^\d+\. /)) {
+      flushParagraph();
+      if (listType !== "ol") {
+        flushList();
+        listType = "ol";
+      }
+      currentList.push(trimmedLine.replace(/^\d+\. /, ""));
+      continue;
+    }
+
+    // Vanlig text - lägg till i paragraf
+    flushList();
+    currentParagraph.push(trimmedLine);
+  }
+
+  // Töm eventuellt kvarvarande innehåll
+  flushList();
+  flushParagraph();
+
+  return elements;
+}
+
+/**
+ * Parser för inline markdown (fetstil, kursiv)
+ */
+function parseInlineMarkdown(text) {
+  // Hantera **fetstil**
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i} className="font-medium">{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
+// Generera metadata dynamiskt för SEO
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
-      title: "Artikel hittades inte | Flexra"
+      title: "Artikel hittades inte"
     };
   }
 
+  // Använd SEO-specifika fält med fallbacks
+  const seoTitle = post.metaTitle || post.title;
+  const seoDescription = post.metaDescription || post.description;
+
   return {
-    title: `${post.title} | Flexra`,
-    description: post.description,
+    // Använder template från layout.js: "%s | Flexra"
+    title: seoTitle,
+    description: seoDescription,
+    keywords: post.keywords || "AI, automation, digitalisering, effektivisering, företag",
+    authors: [{ name: post.author }],
+    robots: post.noIndex ? { index: false, follow: false } : { index: true, follow: true },
+    alternates: {
+      // metadataBase från layout.js gör att relativa URLs fungerar
+      canonical: post.canonicalUrl || `/insikter/${post.slug}`
+    },
     openGraph: {
-      title: post.title,
-      description: post.description,
-      images: post.image ? [{ url: post.image }] : []
+      type: "article",
+      title: seoTitle,
+      description: seoDescription,
+      // Relativ URL - metadataBase gör den absolut
+      url: `/insikter/${post.slug}`,
+      images: post.image ? [{
+        url: post.image,
+        width: 1200,
+        height: 630,
+        alt: post.imageAlt || post.title
+      }] : [],
+      publishedTime: post.date,
+      authors: [post.author],
+      section: post.category
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seoTitle,
+      description: seoDescription,
+      images: post.image ? [post.image] : []
     }
   };
 }
@@ -50,8 +214,44 @@ export default async function BlogPostPage({ params }) {
 
   const relatedPosts = await getRelatedPosts(slug, 3);
 
+  // JSON-LD strukturerad data för sökmotorer (Article schema)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.metaDescription || post.description,
+    image: post.image || undefined,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Flexra",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://flexra.se/logo.png"
+      }
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://flexra.se/insikter/${post.slug}`
+    },
+    keywords: post.keywords || "AI, automation, digitalisering"
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      {/* JSON-LD strukturerad data (med XSS-skydd) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c")
+        }}
+      />
+
       {/* Header med mörk bakgrund */}
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
         <Navbar1 />
@@ -72,7 +272,7 @@ export default async function BlogPostPage({ params }) {
       <article className="px-[5%] py-8 md:py-12">
         <div className="container max-w-4xl mx-auto">
           {/* Titel */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="mb-6">
             {post.title}
           </h1>
 
@@ -110,8 +310,8 @@ export default async function BlogPostPage({ params }) {
           {post.image && (
             <div className="my-8 md:my-12 rounded-2xl overflow-hidden relative aspect-[2/1]">
               <Image
-                src={post.image.replace("w=600&h=400", "w=1200&h=600")}
-                alt={post.title}
+                src={post.image}
+                alt={post.imageAlt || post.title}
                 fill
                 sizes="(min-width: 1024px) 896px, 100vw"
                 className="object-cover"
@@ -121,51 +321,7 @@ export default async function BlogPostPage({ params }) {
 
           {/* Artikelinnehåll */}
           <div className="prose prose-lg max-w-none">
-            {post.content && post.content.split("\n\n").map((paragraph, index) => {
-              if (paragraph.startsWith("## ")) {
-                return (
-                  <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
-                    {paragraph.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (paragraph.startsWith("### ")) {
-                return (
-                  <h3 key={index} className="text-xl font-semibold mt-8 mb-3">
-                    {paragraph.replace("### ", "")}
-                  </h3>
-                );
-              }
-              if (paragraph.startsWith("- ")) {
-                const items = paragraph.split("\n").filter(item => item.startsWith("- "));
-                return (
-                  <ul key={index} className="list-disc pl-6 my-4 space-y-2">
-                    {items.map((item, i) => (
-                      <li key={i} className="text-gray-600">
-                        {item.replace("- ", "")}
-                      </li>
-                    ))}
-                  </ul>
-                );
-              }
-              if (paragraph.match(/^\d\. /)) {
-                const items = paragraph.split("\n").filter(item => item.match(/^\d\. /));
-                return (
-                  <ol key={index} className="list-decimal pl-6 my-4 space-y-2">
-                    {items.map((item, i) => (
-                      <li key={i} className="text-gray-600">
-                        {item.replace(/^\d\. /, "")}
-                      </li>
-                    ))}
-                  </ol>
-                );
-              }
-              return (
-                <p key={index} className="text-gray-600 leading-relaxed my-4">
-                  {paragraph}
-                </p>
-              );
-            })}
+            {post.content && parseMarkdown(post.content)}
           </div>
 
           {/* Taggar */}
@@ -194,7 +350,7 @@ export default async function BlogPostPage({ params }) {
                 />
               </div>
               <div>
-                <p className="font-semibold text-lg">{post.author}</p>
+                <h4 className="mb-1">{post.author}</h4>
                 <p className="text-gray-600 text-sm mt-1">
                   Expert inom AI och automation med över 10 års erfarenhet av att hjälpa
                   företag att effektivisera sina processer.
@@ -209,7 +365,7 @@ export default async function BlogPostPage({ params }) {
       {relatedPosts.length > 0 && (
         <section className="px-[5%] py-16 bg-gray-50">
           <div className="container">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8">Relaterade artiklar</h2>
+            <h2 className="mb-8">Relaterade artiklar</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedPosts.map((relatedPost, index) => (
                 <Link
@@ -219,8 +375,8 @@ export default async function BlogPostPage({ params }) {
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <Image
-                      src={relatedPost.image || "/placeholder.jpg"}
-                      alt={relatedPost.title}
+                      src={relatedPost.image || "/blog/placeholder.jpg"}
+                      alt={relatedPost.imageAlt || relatedPost.title}
                       fill
                       sizes="(min-width: 768px) 33vw, 100vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -230,7 +386,7 @@ export default async function BlogPostPage({ params }) {
                     <span className={`text-xs font-medium px-3 py-1 rounded-full ${relatedPost.categoryColor || "bg-pink-100"}`}>
                       {relatedPost.category}
                     </span>
-                    <h3 className="text-lg font-semibold mt-3 group-hover:text-gray-600 transition-colors">
+                    <h3 className="mt-3 group-hover:text-gray-600 transition-colors">
                       {relatedPost.title}
                     </h3>
                   </div>

@@ -9,6 +9,7 @@ import { Layout442 } from "../components/Layout442";
 import { Blog37 } from "../components/Blog37";
 import { Cta7 } from "../components/Cta7";
 import { Footer1 } from "../components/Footer1";
+import { ContactFormWizard } from "../components/blocks";
 
 export default function Page() {
   return (
@@ -19,6 +20,9 @@ export default function Page() {
       <Logo3 />
       <Layout29 />
       <Layout442 />
+
+      <ContactFormWizard />
+
       <Blog37 />
       <Cta7 />
       <Footer1 />

@@ -74,8 +74,8 @@ export function BlogGrid({
                 <div className="aspect-[4/3] overflow-hidden">
                   <div className="relative w-full h-full">
                     <Image
-                      src={post.image || "/placeholder.jpg"}
-                      alt={post.title}
+                      src={post.image || "/blog/placeholder.jpg"}
+                      alt={post.imageAlt || post.title}
                       fill
                       sizes={columns === 1
                         ? "100vw"

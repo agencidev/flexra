@@ -28,7 +28,7 @@ export function Layout442() {
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 z-0 relative">
+      <div className="absolute inset-0 z-0">
         <Image
           src="/477574545_952501333656469_9057813305953097372_n.jpg"
           alt="Bakgrundsbild"

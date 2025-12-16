@@ -78,3 +78,61 @@ p {
   display: none;
 }
 
+/* Cookie Consent Styling - använd webbplatsens fonter */
+#cc-main {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+#cc-main .cm,
+#cc-main .pm {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+#cc-main .cm__title,
+#cc-main .pm__title,
+#cc-main .pm__section-title {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+}
+
+#cc-main .cm__btn,
+#cc-main .pm__btn {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+/* Mörk stil för att matcha sajten */
+#cc-main .cm {
+  --cc-bg: #1a1a1a;
+  --cc-text: #ffffff;
+  --cc-btn-primary-bg: #ffffff;
+  --cc-btn-primary-text: #1a1a1a;
+  --cc-btn-primary-hover-bg: #e5e5e5;
+  --cc-btn-secondary-bg: transparent;
+  --cc-btn-secondary-text: #ffffff;
+  --cc-btn-secondary-hover-bg: rgba(255, 255, 255, 0.1);
+  --cc-btn-secondary-border-color: rgba(255, 255, 255, 0.3);
+  --cc-link-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#cc-main .pm {
+  --cc-bg: #1a1a1a;
+  --cc-text: #ffffff;
+  --cc-btn-primary-bg: #ffffff;
+  --cc-btn-primary-text: #1a1a1a;
+  --cc-btn-primary-hover-bg: #e5e5e5;
+  --cc-btn-secondary-bg: transparent;
+  --cc-btn-secondary-text: #ffffff;
+  --cc-btn-secondary-hover-bg: rgba(255, 255, 255, 0.1);
+  --cc-btn-secondary-border-color: rgba(255, 255, 255, 0.3);
+  --cc-link-color: #ffffff;
+  --cc-toggle-bg-on: #ffffff;
+  --cc-toggle-knob-bg: #1a1a1a;
+  --cc-separator-border-color: rgba(255, 255, 255, 0.1);
+  --cc-cookie-table-border: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+

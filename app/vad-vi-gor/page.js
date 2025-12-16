@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Zap, RefreshCw, Shield, Check } from "lucide-react";
 import { FAQ } from "../../components/blocks/FAQ";
+import { IntegrationBuilder, useIntegrationBuilder } from "../../components/blocks/IntegrationBuilder";
 
 const tools = [
   {
@@ -84,24 +85,51 @@ const tools = [
 ];
 
 const integrations = [
-  { name: "Slack", logo: "/logos/slack.svg", url: "https://slack.com" },
-  { name: "Teams", logo: "/logos/teams.svg", url: "https://microsoft.com/teams" },
-  { name: "Salesforce", logo: "/logos/salesforce.svg", url: "https://salesforce.com" },
-  { name: "HubSpot", logo: "/logos/hubspot.svg", url: "https://hubspot.com" },
+  // Ekonomi
   { name: "Fortnox", logo: "/logos/fortnox.svg", url: "https://fortnox.se" },
   { name: "Monitor", logo: "/logos/monitor.svg", url: "https://monitor.se" },
   { name: "Visma", logo: "/logos/visma.svg", url: "https://visma.se" },
-  { name: "Zapier", logo: "/logos/zapier.svg", url: "https://zapier.com" },
-  { name: "Notion", logo: "/logos/notion.svg", url: "https://notion.so" },
+  // Betalningar
+  { name: "Stripe", logo: "/logos/stripe.svg", url: "https://stripe.com" },
+  { name: "Klarna", logo: "/logos/klarna.svg", url: "https://klarna.com" },
+  { name: "Swish", logo: "/logos/swish.svg", url: "https://swish.nu" },
+  // CRM
+  { name: "Salesforce", logo: "/logos/salesforce.svg", url: "https://salesforce.com" },
+  { name: "HubSpot", logo: "/logos/hubspot.svg", url: "https://hubspot.com" },
+  { name: "Pipedrive", logo: "/logos/pipedrive.svg", url: "https://pipedrive.com" },
+  // Kommunikation
+  { name: "Slack", logo: "/logos/slack.svg", url: "https://slack.com" },
+  { name: "Teams", logo: "/logos/teams.svg", url: "https://microsoft.com/teams" },
   { name: "Gmail", logo: "/logos/gmail.svg", url: "https://gmail.com" },
   { name: "Outlook", logo: "/logos/outlook.svg", url: "https://outlook.com" },
+  { name: "WhatsApp", logo: "/logos/whatsapp.svg", url: "https://whatsapp.com" },
+  { name: "Telegram", logo: "/logos/telegram.svg", url: "https://telegram.org" },
+  { name: "Discord", logo: "/logos/discord.svg", url: "https://discord.com" },
+  { name: "LinkedIn", logo: "/logos/linkedin.svg", url: "https://linkedin.com" },
+  { name: "Google Meet", logo: "/logos/googlemeet.svg", url: "https://meet.google.com" },
+  // Filhantering
+  { name: "Google Drive", logo: "/logos/googledrive.svg", url: "https://drive.google.com" },
+  { name: "OneDrive", logo: "/logos/onedrive.svg", url: "https://onedrive.com" },
+  { name: "Dropbox", logo: "/logos/dropbox.svg", url: "https://dropbox.com" },
   { name: "Sheets", logo: "/logos/sheets.svg", url: "https://sheets.google.com" },
+  { name: "Excel", logo: "/logos/excel.svg", url: "https://microsoft.com/excel" },
+  // Schemaläggning
+  { name: "Google Calendar", logo: "/logos/googlecalendar.svg", url: "https://calendar.google.com" },
+  { name: "Calendly", logo: "/logos/calendly.svg", url: "https://calendly.com" },
+  // Projekthantering
+  { name: "Notion", logo: "/logos/notion.svg", url: "https://notion.so" },
   { name: "Trello", logo: "/logos/trello.svg", url: "https://trello.com" },
   { name: "Jira", logo: "/logos/jira.svg", url: "https://atlassian.com/jira" },
   { name: "Asana", logo: "/logos/asana.svg", url: "https://asana.com" },
+  { name: "Monday.com", logo: "/logos/monday.svg", url: "https://monday.com" },
+  { name: "ClickUp", logo: "/logos/clickup.svg", url: "https://clickup.com" },
+  { name: "Airtable", logo: "/logos/airtable.svg", url: "https://airtable.com" },
+  // Support
   { name: "Zendesk", logo: "/logos/zendesk.svg", url: "https://zendesk.com" },
-  { name: "WhatsApp", logo: "/logos/whatsapp.svg", url: "https://whatsapp.com" },
-  { name: "Google Meet", logo: "/logos/googlemeet.svg", url: "https://meet.google.com" }
+  { name: "Freshdesk", logo: "/logos/freshdesk.svg", url: "https://freshdesk.com" },
+  { name: "Intercom", logo: "/logos/intercom.svg", url: "https://intercom.com" },
+  // Övrigt
+  { name: "Zapier", logo: "/logos/zapier.svg", url: "https://zapier.com" },
 ];
 
 const services = [
@@ -144,8 +172,10 @@ const features = [
 ];
 
 export default function VadViGorPage() {
+  const integrationBuilder = useIntegrationBuilder();
+
   return (
-    <PageLayout 
+    <PageLayout
       title="Vi bygger digitala verktyg som arbetar för dig"
       subtitle="Vad vi gör"
     >
@@ -331,13 +361,24 @@ export default function VadViGorPage() {
 
           {/* CTA Button */}
           <div className="text-center mt-8">
-            <GetStartedButton dark>Utforska integrationer</GetStartedButton>
+            <button
+              onClick={integrationBuilder.open}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition-colors"
+            >
+              Utforska integrationer
+            </button>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
       <FAQ background="white" />
+
+      {/* Integration Builder Modal */}
+      <IntegrationBuilder
+        isOpen={integrationBuilder.isOpen}
+        onClose={integrationBuilder.close}
+      />
     </PageLayout>
   );
 }

@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import { CookieConsentBanner } from "../components/CookieConsent";
 
 const spaceGrotesk = localFont({
   src: [
@@ -51,8 +52,55 @@ const dmSans = localFont({
 });
 
 export const metadata = {
-  title: "Flexra - AI och Automation",
-  description: "Vi bygger digitala verktyg som arbetar för dig. Med AI och automation frigör du timmar varje vecka.",
+  metadataBase: new URL("https://flexra.se"),
+  title: {
+    default: "Flexra - AI och Automation för moderna företag",
+    template: "%s | Flexra"
+  },
+  description: "Vi bygger digitala verktyg som arbetar för dig. Med AI och automation frigör du timmar varje vecka. Expert på processautomation, AI-integration och digitalisering.",
+  keywords: ["AI", "automation", "digitalisering", "processautomation", "AI-integration", "effektivisering", "företag", "Sverige"],
+  authors: [{ name: "Flexra" }],
+  creator: "Flexra",
+  publisher: "Flexra",
+  formatDetection: {
+    email: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "sv_SE",
+    url: "https://flexra.se",
+    siteName: "Flexra",
+    title: "Flexra - AI och Automation för moderna företag",
+    description: "Vi bygger digitala verktyg som arbetar för dig. Med AI och automation frigör du timmar varje vecka.",
+    images: [{
+      url: "/og-image.png",
+      width: 1200,
+      height: 630,
+      alt: "Flexra - AI och Automation"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Flexra - AI och Automation",
+    description: "Vi bygger digitala verktyg som arbetar för dig.",
+    images: ["/og-image.png"]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1
+    }
+  },
+  verification: {
+    // google: "din-google-verification-kod",
+    // yandex: "din-yandex-kod",
+  }
 };
 
 export default function RootLayout({ children }) {
@@ -60,6 +108,7 @@ export default function RootLayout({ children }) {
     <html lang="sv">
       <body className={`${dmSans.variable} ${spaceGrotesk.variable} font-sans`}>
         {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );
