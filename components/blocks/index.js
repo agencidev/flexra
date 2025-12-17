@@ -18,6 +18,7 @@ export { FAQ } from "./FAQ";
 // Blog Sections
 export { BlogGrid } from "./BlogGrid";
 export { BlogCarousel } from "./BlogCarousel";
+export { BlogListWithSearch } from "./BlogListWithSearch";
 
 // Contact Forms
 export { ContactForm } from "./ContactForm";

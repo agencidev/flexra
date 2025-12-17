@@ -267,7 +267,8 @@ export function ContactFormWizard({
                             type="button"
                             onClick={() => {
                               handleChange("topic", topic.id);
-                              setTimeout(nextStep, 200);
+                              // Go directly to step 2 to avoid stale closure in validateStep
+                              setTimeout(() => setStep(2), 200);
                             }}
                             whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}

@@ -1,17 +1,21 @@
-"use client";
-
 import { Navbar1 } from "../components/Navbar1";
 import { Header23 } from "../components/Header23";
 import { Layout396 } from "../components/Layout396";
 import { Logo3 } from "../components/Logo3";
 import { Layout29 } from "../components/Layout29";
 import { Layout442 } from "../components/Layout442";
-import { Blog37 } from "../components/Blog37";
+import { BlogCarousel } from "../components/blocks/BlogCarousel";
 import { Cta7 } from "../components/Cta7";
 import { Footer1 } from "../components/Footer1";
 import { ContactFormWizard } from "../components/blocks";
+import { getAllPosts } from "../lib/posts";
 
-export default function Page() {
+export const revalidate = 3600; // Revalidera varje timme
+
+export default async function Page() {
+  // Hämta senaste blogginlägg från AITable
+  const posts = await getAllPosts({ limit: 6 });
+
   return (
     <div>
       <Navbar1 />
@@ -23,7 +27,11 @@ export default function Page() {
 
       <ContactFormWizard />
 
-      <Blog37 />
+      <BlogCarousel
+        posts={posts}
+        title="Senaste insikter och trender"
+        badge="Blogg och artiklar"
+      />
       <Cta7 />
       <Footer1 />
     </div>

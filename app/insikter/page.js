@@ -1,5 +1,5 @@
 import { PageLayout } from "../../components/PageLayout";
-import { BlogGrid } from "../../components/blocks/BlogGrid";
+import { BlogListWithSearch } from "../../components/blocks/BlogListWithSearch";
 import { getAllPosts } from "../../lib/posts";
 
 export const metadata = {
@@ -18,13 +18,12 @@ export default async function InsikterPage() {
       title="Senaste insikter och trender inom AI och automation"
       subtitle="Insikter"
     >
-      <BlogGrid
+      <BlogListWithSearch
         posts={posts}
-        columns={3}
+        postsPerPage={18}
         showAuthor={true}
         showDate={true}
         showDescription={true}
-        background="white"
       />
 
       {posts.length === 0 && (
