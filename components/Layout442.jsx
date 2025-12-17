@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "./ui/button";
-import { ChevronRight } from "lucide-react";
+import { GetStartedButton } from "./ui/get-started-button";
 import Image from "next/image";
 
 export function Layout442() {
@@ -23,7 +22,7 @@ export function Layout442() {
               fungerar i verkligheten.
             </p>
             <div className="mt-6 flex flex-wrap gap-4 md:mt-8">
-              <Button variant="secondary-alt">Kontakta</Button>
+              <GetStartedButton>Kontakta</GetStartedButton>
             </div>
           </div>
         </div>

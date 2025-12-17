@@ -24,6 +24,11 @@ export { BlogListWithSearch } from "./BlogListWithSearch";
 export { ContactForm } from "./ContactForm";
 export { ContactFormWizard } from "./ContactFormWizard";
 
+// Case Studies
+export { CaseStudyMetrics } from "./CaseStudyMetrics";
+export { CaseStudyTechStack } from "./CaseStudyTechStack";
+export { CaseStudyGallery } from "./CaseStudyGallery";
+
 // Planerade komponenter (uncomment när de skapas):
 // export { Testimonials } from "./Testimonials";
 // export { Stats } from "./Stats";

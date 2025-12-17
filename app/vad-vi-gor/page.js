@@ -361,12 +361,9 @@ export default function VadViGorPage() {
 
           {/* CTA Button */}
           <div className="text-center mt-8">
-            <button
-              onClick={integrationBuilder.open}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition-colors"
-            >
+            <GetStartedButton dark onClick={integrationBuilder.open}>
               Utforska integrationer
-            </button>
+            </GetStartedButton>
           </div>
         </div>
       </section>

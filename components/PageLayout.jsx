@@ -15,7 +15,7 @@ export function PageLayout({ children, title, subtitle }) {
             <p className="text-sm uppercase tracking-wider text-white/60 mb-4">
               {subtitle}
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold max-w-4xl">
+            <h1 className="max-w-4xl">
               {title}
             </h1>
           </div>

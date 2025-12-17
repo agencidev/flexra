@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Om Flexra", href: "/om-flexra" },
   { label: "Case studies", href: "/case-studies" },
   { label: "Insikter", href: "/insikter" },
+  { label: "Kontakt", href: "/kontakt" },
 ];
 
 export function Navbar1() {
@@ -74,7 +75,11 @@ export function Navbar1() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden mt-2 mx-auto max-w-5xl">
-          <div className="bg-white/15 backdrop-blur-xl rounded-2xl border border-white/20 p-4">
+          <div className={`rounded-2xl p-4 transition-all duration-300 ${
+            isScrolled
+              ? "bg-[#1a1a1a] border border-white/10 shadow-lg"
+              : "bg-white/15 backdrop-blur-xl border border-white/20"
+          }`}>
             <div className="flex flex-col gap-2">
               {navLinks.map((link, index) => (
                 <Link

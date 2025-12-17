@@ -25,6 +25,7 @@ Denna styleguide fungerar som regelverk för hela Flexra-webbplatsen. Följ dess
 13. [Återanvändbara Block-komponenter](#13-återanvändbara-block-komponenter)
 14. [Mobilanpassning](#14-mobilanpassning)
 15. [Blogg-system & API](#15-blogg-system--api)
+16. [Case Study-system](#16-case-study-system)
 
 ---
 
@@ -217,6 +218,7 @@ Dessa används för kort, badges, ikoner och dekorativa element.
 | **Rosa/Pink** | `#FCE7F3` | `rgb(252, 231, 243)` | `bg-pink-100` | Kort, badges, ikon-bakgrund |
 | **Gul/Yellow** | `#FEF9C3` | `rgb(254, 249, 195)` | `bg-yellow-100` | Kort, CTA-bakgrund, badges |
 | **Lime/Grön** | `#ECFCCB` | `rgb(236, 252, 203)` | `bg-lime-100` | Kort, badges, ikon-bakgrund |
+| **Indigo/Blå** | `#E0E7FF` | `rgb(224, 231, 255)` | `bg-indigo-100` | Kort, markerade element, CTA |
 
 #### Mörkare varianter (för text på pastellbakgrund)
 | Namn | HEX | Tailwind | Användning |
@@ -224,6 +226,8 @@ Dessa används för kort, badges, ikoner och dekorativa element.
 | **Rosa text** | - | `text-pink-800` | Text på rosa bakgrund |
 | **Gul text** | - | `text-yellow-800` | Text på gul bakgrund |
 | **Lime text** | `#65A30D` | `text-lime-600` / `text-lime-700` | Text på lime bakgrund |
+| **Indigo text** | - | `text-indigo-800` | Text på indigo bakgrund |
+| **Indigo border** | `#6366F1` | `border-indigo-500` | Ram på indigo kort |
 
 ### 2.3 Gråskala
 
@@ -281,6 +285,7 @@ style={{ backgroundColor: '#1a1a1a' }}
 <div style={{ backgroundColor: '#fce7f3' }}>Rosa kort</div>
 <div style={{ backgroundColor: '#fef9c3' }}>Gult kort</div>
 <div style={{ backgroundColor: '#ecfccb' }}>Lime kort</div>
+<div style={{ backgroundColor: '#e0e7ff' }}>Indigo kort</div>
 
 // Grå text på ljus bakgrund
 <p className="text-gray-600">Sekundär text</p>
@@ -295,8 +300,8 @@ style={{ backgroundColor: '#1a1a1a' }}
 <div className="bg-pink-500">För stark rosa</div>
 <div className="bg-yellow-400">För stark gul</div>
 
-// FEL: Använd inte blå eller andra färger utanför paletten
-<div className="bg-blue-500">Blå finns inte i paletten</div>
+// FEL: Använd inte starka blå - använd pastellvarianten bg-indigo-100 istället
+<div className="bg-blue-500">För stark blå</div>
 
 // FEL: Använd inte för låg kontrast
 <p className="text-gray-300">För ljus text på vit bakgrund</p>
@@ -2528,6 +2533,252 @@ node scripts/migrate-posts-to-aitable.js
 
 ---
 
+## 16. Case Study-system
+
+Case study-systemet använder AITable som databas och stödjer multi-site filtrering.
+
+### 16.1 Arkitektur
+
+```
+/lib/
+  aitable.js          # AITable API-klient
+  case-studies.js     # Case study-hantering (CRUD + multi-site)
+
+/components/blocks/
+  CaseStudyMetrics.jsx    # Nyckeltal i pastellkort
+  CaseStudyTechStack.jsx  # Tech stack med loggor
+  CaseStudyGallery.jsx    # Bildgalleri med lightbox
+
+/app/
+  case-studies/
+    page.js               # Listar alla case studies
+    CaseStudyList.jsx     # Klientkomponent med filter/sökning
+    [slug]/
+      page.js             # Enskild case study
+  api/
+    case-studies/
+      route.js            # GET, POST
+      [slug]/
+        route.js          # GET, PUT, DELETE
+      setup/
+        route.js          # Skapa AITable-fält
+```
+
+### 16.2 AITable-fält
+
+| Fält | Typ | Beskrivning |
+|------|-----|-------------|
+| `Title` | Text | Case study-titel (default-fält) |
+| `slug` | Text | URL-slug (unik) |
+| `client` | Text | Kundnamn |
+| `clientLogo` | URL | Kundens logotyp |
+| `industry` | SingleSelect | Bransch |
+| `category` | SingleSelect | Processautomation, AI-integration, Integration, etc. |
+| `categoryColor` | SingleSelect | bg-pink-100, bg-yellow-100, bg-lime-100, etc. |
+| `heroImage` | URL | Huvudbild |
+| `excerpt` | Text | Kort beskrivning för listsida |
+| `challenge` | LongText | Markdown - kundens utmaning |
+| `solution` | LongText | Markdown - vår lösning |
+| `results` | LongText | Markdown - uppnådda resultat |
+| `metrics` | Text | JSON-array: `[{"value": "80%", "label": "Förbättring"}]` |
+| `gallery` | Text | JSON-array: `["url1", "url2"]` |
+| `techStack` | Text | Kommaseparerad: `fortnox,slack,hubspot` |
+| `testimonial` | LongText | Kundcitat |
+| `testimonialAuthor` | Text | Citatpersonens namn |
+| `testimonialRole` | Text | Citatpersonens roll |
+| `contactEmail` | Email | Kontaktperson |
+| `published` | Checkbox | Publicerad |
+| `date` | Text | Formaterat datum (ex: "15 dec 2024") |
+| `company` | Text | Multi-site filter (ex: "FLEXRA") |
+| `metaTitle` | Text | SEO-titel (max 60 tecken) |
+| `metaDescription` | Text | SEO-beskrivning (150-160 tecken) |
+| `keywords` | Text | SEO-nyckelord |
+| `noIndex` | Checkbox | Dölj från sökmotorer |
+
+### 16.3 Tech Stack-loggor
+
+Tillgängliga logo-ID:n för `techStack`-fältet (finns i `/public/logos/`):
+
+| Kategori | Logo-ID:n |
+|----------|-----------|
+| **CRM** | salesforce, hubspot, pipedrive |
+| **Ekonomi** | fortnox, monitor, visma |
+| **Kommunikation** | slack, teams, whatsapp, gmail, outlook, discord, linkedin |
+| **Lagring** | google-drive, onedrive, dropbox, google-sheets, excel |
+| **Projekthantering** | notion, trello, jira, asana, monday, clickup, airtable |
+| **Support** | zendesk, freshdesk, intercom |
+| **Betalningar** | stripe, klarna, swish |
+| **Automation** | zapier, make, n8n |
+| **AI** | openai, anthropic, gemini, perplexity |
+| **E-handel** | shopify, woocommerce |
+| **Schemaläggning** | calendly, google-calendar |
+
+**Användning:**
+```
+techStack: "fortnox,slack,hubspot,openai"
+```
+
+### 16.4 Responsiv typografi på case study-sidor
+
+Eftersom CSS sätter fasta storlekar på rubriker (`h1: 5rem`, `h2: 3.5rem`), MÅSTE hero- och CTA-rubriker använda responsiva Tailwind-klasser:
+
+```jsx
+// Hero-rubrik (h1)
+<h1 className="text-3xl md:text-4xl lg:text-5xl text-white mb-6">
+  {caseStudy.title}
+</h1>
+
+// CTA-sektionsrubrik (h2)
+<h2 className="text-2xl md:text-3xl lg:text-4xl text-white mb-4">
+  Redo att ta nästa steg?
+</h2>
+
+// Content-rubriker (h2) - använd default
+<h2 className="mb-6">Utmaningen</h2>
+```
+
+| Element | Mobil | Tablet (md) | Desktop (lg) |
+|---------|-------|-------------|--------------|
+| Hero h1 | text-3xl (30px) | text-4xl (36px) | text-5xl (48px) |
+| CTA h2 | text-2xl (24px) | text-3xl (30px) | text-4xl (36px) |
+| Content h2 | default | default | default |
+
+### 16.5 SEO & Metadata
+
+Case study-sidor genererar automatiskt SEO-metadata:
+
+```jsx
+export async function generateMetadata({ params }) {
+  const caseStudy = await getCaseStudyBySlug(slug);
+
+  // Använder AITable-fält om de finns
+  const seoTitle = caseStudy.metaTitle || `${caseStudy.title} | Case Study`;
+  const seoDescription = caseStudy.metaDescription || caseStudy.excerpt;
+
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    keywords: caseStudy.keywords || "...",
+    robots: caseStudy.noIndex ? { index: false } : { index: true },
+    alternates: { canonical: `/case-studies/${slug}` },
+    openGraph: { ... },
+    twitter: { ... }
+  };
+}
+```
+
+**JSON-LD strukturerad data:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "...",
+  "description": "...",
+  "inLanguage": "sv-SE",
+  "author": { "@type": "Organization", "name": "Flexra" },
+  "about": { "@type": "Organization", "name": "Kundnamn" }
+}
+```
+
+### 16.6 Multi-site support
+
+Case studies filtreras automatiskt på `company`-fältet:
+
+```javascript
+// lib/case-studies.js
+const DEFAULT_COMPANY = process.env.SITE_COMPANY || "FLEXRA";
+
+// Alla queries filtrerar på company
+const caseStudies = await getAllCaseStudies({ company: "FLEXRA" });
+
+// Eller använd env-variabel
+// .env.local
+SITE_COMPANY=FLEXRA
+```
+
+### 16.7 API Endpoints
+
+#### GET /api/case-studies
+```
+?limit=10
+?industry=Bygg
+?category=Processautomation
+?company=FLEXRA
+?includeUnpublished=true (kräver API-nyckel)
+```
+
+#### POST /api/case-studies
+Kräver header: `x-api-key: din-api-nyckel`
+
+```json
+{
+  "title": "Rubrik (obligatorisk)",
+  "client": "Kundnamn (obligatorisk)",
+  "industry": "Bygg",
+  "category": "Processautomation",
+  "excerpt": "Kort beskrivning...",
+  "challenge": "## Markdown...",
+  "solution": "## Markdown...",
+  "results": "## Markdown...",
+  "metrics": [{"value": "80%", "label": "Förbättring"}],
+  "techStack": "fortnox,slack",
+  "published": true,
+  "company": "FLEXRA"
+}
+```
+
+#### POST /api/case-studies/setup
+Skapar alla AITable-fält. Kräver API-nyckel via `Authorization: Bearer xxx`.
+
+### 16.8 Block-komponenter
+
+**CaseStudyMetrics:**
+```jsx
+import { CaseStudyMetrics } from "@/components/blocks";
+
+<CaseStudyMetrics
+  metrics={[
+    { value: "80%", label: "Minskad tid" },
+    { value: "40h", label: "Sparad per månad" }
+  ]}
+/>
+```
+
+**CaseStudyTechStack:**
+```jsx
+import { CaseStudyTechStack } from "@/components/blocks";
+
+<CaseStudyTechStack tools="fortnox,slack,hubspot" />
+```
+
+**CaseStudyGallery:**
+```jsx
+import { CaseStudyGallery } from "@/components/blocks";
+
+<CaseStudyGallery
+  images={["url1.jpg", "url2.jpg"]}
+  // eller
+  images={[{ url: "url1.jpg", alt: "Beskrivning" }]}
+/>
+```
+
+### 16.9 Miljövariabler
+
+```env
+# AITable
+AITABLE_API_TOKEN=xxx
+AITABLE_SPACE_ID=xxx
+AITABLE_CASE_STUDIES_ID=xxx
+
+# Multi-site (optional)
+SITE_COMPANY=FLEXRA
+
+# API Authentication (samma som blogg)
+POSTS_API_KEY=xxx
+```
+
+---
+
 ## Snabbreferens
 
 ### Tailwind-klasser att använda
@@ -2560,6 +2811,7 @@ node scripts/migrate-posts-to-aitable.js
 style={{ backgroundColor: '#fce7f3' }}  // Rosa
 style={{ backgroundColor: '#fef9c3' }}  // Gul
 style={{ backgroundColor: '#ecfccb' }}  // Lime
+style={{ backgroundColor: '#e0e7ff' }}  // Indigo
 ```
 
 ---
@@ -2568,6 +2820,7 @@ style={{ backgroundColor: '#ecfccb' }}  // Lime
 
 | Version | Datum | Ändringar |
 |---------|-------|-----------|
+| 2.5 | Dec 2025 | Lagt till: Case Study-system (16) - AITable, komponenter, multi-site, SEO, responsiv typografi |
 | 2.4 | Dec 2025 | Lagt till: Blogg-system & API (15) - AITable, BlogGrid, BlogCarousel, API-routes för n8n |
 | 2.3 | Dec 2025 | Lagt till: Mobilanpassning (14) - komplett guide för responsiv design |
 | 2.2 | Dec 2025 | Utökad sektion 13: index.js, planerade block-komponenter, namnkonventioner |

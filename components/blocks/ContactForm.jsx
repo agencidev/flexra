@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import { Button } from "../ui/button";
+import { CheckCircle, AlertCircle } from "lucide-react";
+import { GetStartedButton } from "../ui/get-started-button";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 /**
@@ -348,24 +348,15 @@ export function ContactForm({
                 )}
 
                 <div className="pt-2">
-                  <Button
+                  <GetStartedButton
                     type="submit"
-                    disabled={status === "loading"}
-                    size="lg"
-                    className="w-full gap-2"
+                    dark
+                    loading={status === "loading"}
+                    loadingText="Skickar meddelande..."
+                    className="w-full"
                   >
-                    {status === "loading" ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Skickar...
-                      </>
-                    ) : (
-                      <>
-                        {submitText}
-                        <Send className="w-4 h-4" />
-                      </>
-                    )}
-                  </Button>
+                    {submitText}
+                  </GetStartedButton>
                 </div>
 
                 <p className="text-xs text-gray-500 text-center">

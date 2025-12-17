@@ -3,10 +3,11 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowRight, ArrowLeft, CheckCircle, Loader2, Send,
+  ArrowLeft, CheckCircle,
   Rocket, Lightbulb, Calendar, MessageCircle, User, Building2, Sparkles
 } from "lucide-react";
 import { Button } from "../ui/button";
+import { GetStartedButton } from "../ui/get-started-button";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 /**
@@ -57,11 +58,12 @@ const steps = [
   { id: 3, label: "Meddelande" },
 ];
 
+// Input styling enligt styleguide 4.6
 const inputStyles = `
-  w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-sm
+  w-full px-4 py-3 rounded-xl border border-gray-200 bg-white
   text-gray-900 placeholder:text-gray-400 font-sans text-base
-  focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-100
-  transition-all duration-300
+  focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-200
+  transition-colors
 `;
 
 export function ContactFormWizard({
@@ -430,17 +432,19 @@ export function ContactFormWizard({
               </Button>
 
               {step < 3 ? (
-                <Button type="button" onClick={nextStep} className="gap-2">
-                  Nästa <ArrowRight className="w-4 h-4" />
-                </Button>
+                <GetStartedButton dark type="button" onClick={nextStep}>
+                  Nästa
+                </GetStartedButton>
               ) : (
-                <Button type="button" onClick={handleSubmit} disabled={status === "loading"} className="gap-2">
-                  {status === "loading" ? (
-                    <><Loader2 className="w-5 h-5 animate-spin" /> Skickar...</>
-                  ) : (
-                    <>Skicka <Send className="w-4 h-4" /></>
-                  )}
-                </Button>
+                <GetStartedButton
+                  dark
+                  type="button"
+                  onClick={handleSubmit}
+                  loading={status === "loading"}
+                  loadingText="Skickar meddelande..."
+                >
+                  Skicka meddelande
+                </GetStartedButton>
               )}
             </div>
           )}
