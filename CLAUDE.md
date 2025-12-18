@@ -1,108 +1,91 @@
-# Flexra Project Memory
+# CLAUDE.md
 
-## Project Overview
-Flexra is a Next.js 16 website for an AI/automation consulting company. Uses AITable as headless CMS.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Tech Stack
-- Next.js 16 with App Router
-- Tailwind CSS
-- AITable API for content management
-- Cloudflare Turnstile for form protection
+## Commands
+
+```bash
+pnpm install          # Install dependencies
+pnpm dev              # Start dev server at localhost:3000
+pnpm build            # Production build
+pnpm lint             # Run ESLint
+```
+
+## Architecture
+
+### Tech Stack
+- Next.js 16 with App Router (JavaScript, no TypeScript)
+- Tailwind CSS with Relume UI components
+- AITable as headless CMS
+- Cloudflare Turnstile for form spam protection
+
+### Key Directories
+- `app/` - Next.js App Router pages and API routes
+- `components/` - React components (Relume-based layouts + custom blocks)
+- `components/blocks/` - Reusable content blocks (FAQ, ContactForm, CaseStudy*, Blog*)
+- `components/ui/` - Base UI components (Button, GetStartedButton)
+- `lib/` - Data fetching utilities (aitable.js, posts.js, case-studies.js)
+- `public/logos/` - Integration/tech stack logos (fortnox.svg, slack.svg, etc.)
+
+### Data Flow
+```
+AITable API → lib/aitable.js → lib/posts.js / lib/case-studies.js → API routes → Pages
+```
+
+All content (blog posts, case studies) is stored in AITable and fetched via `lib/aitable.js`. Domain-specific logic lives in `lib/posts.js` and `lib/case-studies.js`.
+
+### Page Layout Pattern
+Use `PageLayout` component for consistent page structure with dark hero and navbar:
+```jsx
+<PageLayout title="Page Title" subtitle="Category">
+  <section className="px-[5%] py-16 md:py-24 lg:py-28">
+    {/* Content */}
+  </section>
+</PageLayout>
+```
+
+### CTA Buttons
+Always use `GetStartedButton` for primary CTAs - it has animated chevron icon:
+```jsx
+<GetStartedButton dark>Boka möte</GetStartedButton>
+<GetStartedButton dark loading={isLoading} loadingText="Skickar...">Skicka meddelande</GetStartedButton>
+```
 
 ## Environment Variables
+
 ```
 AITABLE_API_TOKEN=xxx
 AITABLE_SPACE_ID=xxx
 AITABLE_FLEXRA_BLOG_ID=xxx
 AITABLE_CASE_STUDIES_ID=xxx
 POSTS_API_KEY=xxx
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=xxx
+TURNSTILE_SECRET_KEY=xxx
 ```
 
----
+## AITable Content Systems
 
-## Case Study System
+### Case Studies (`AITABLE_CASE_STUDIES_ID`)
+Key fields: `slug`, `title`, `client`, `industry`, `category`, `categoryColor`, `heroImage`, `excerpt`, `challenge`, `solution`, `results`, `metrics` (JSON), `techStack` (comma-separated), `testimonial`, `published`, `company`
 
-### AITable Fields
-| Field | Type | Description |
-|-------|------|-------------|
-| Title | SingleText | Case study title (default field) |
-| slug | SingleText | URL-friendly identifier |
-| client | SingleText | Customer name |
-| clientLogo | URL | Customer logo URL |
-| heroImage | URL | Main image |
-| excerpt | Text | Short description for list page |
-| industry | SingleSelect | Bygg, E-handel, Konsult, Finans, Tillverkning, Hälsovård, Utbildning, Transport, Fastighet, IT |
-| category | SingleSelect | Processautomation, AI-integration, Integration, Dataanalys, Kundservice |
-| categoryColor | SingleSelect | bg-pink-100, bg-yellow-100, bg-lime-100, bg-indigo-100, bg-blue-100 |
-| challenge | Text | Markdown - customer's challenge |
-| solution | Text | Markdown - our solution |
-| results | Text | Markdown - achieved results |
-| metrics | Text | JSON array: `[{"value": "80%", "label": "Improvement"}]` |
-| gallery | Text | JSON array: `["url1", "url2"]` or `[{"url": "...", "alt": "..."}]` |
-| techStack | SingleText | Comma-separated: `fortnox,slack,hubspot` |
-| testimonial | Text | Customer quote |
-| testimonialAuthor | SingleText | Quote author name |
-| testimonialRole | SingleText | Quote author role |
-| contactEmail | Email | Contact email |
-| published | Checkbox | Publishing status |
-| date | SingleText | Swedish format: "16 dec 2025" |
-| company | SingleText | Filter by company (e.g., "FLEXRA") |
-| metaTitle | SingleText | SEO title |
-| metaDescription | Text | SEO description |
-| keywords | SingleText | SEO keywords |
-| noIndex | Checkbox | Exclude from search engines |
-
-### Tech Stack Logo IDs
-Available logos in `/public/logos/`:
-- **CRM:** salesforce, hubspot, pipedrive
-- **Finance:** fortnox, monitor, visma
-- **Communication:** slack, teams, whatsapp, gmail, outlook, discord, linkedin
-- **Storage:** google-drive, onedrive, dropbox, google-sheets, excel
-- **Project Management:** notion, trello, jira, asana, monday, clickup, airtable
-- **Support:** zendesk, freshdesk, intercom
-- **Payments:** stripe, klarna, swish
-- **Automation:** zapier, make, n8n
-- **AI:** openai, anthropic, gemini, perplexity
-- **E-commerce:** shopify, woocommerce
-- **Scheduling:** calendly, google-calendar
-
-### API Endpoints
-- `GET /api/case-studies` - List all (filter: industry, category, company, limit)
-- `POST /api/case-studies` - Create new (requires API key)
-- `GET /api/case-studies/[slug]` - Get single
-- `PUT /api/case-studies/[slug]` - Update (requires API key)
-- `DELETE /api/case-studies/[slug]` - Delete (requires API key)
-- `POST /api/case-studies/setup` - Create all fields in AITable (requires API key)
-
-### Components
-- `CaseStudyMetrics` - Displays metrics in pastel cards
-- `CaseStudyTechStack` - Shows tech stack with logos
-- `CaseStudyGallery` - Image gallery with lightbox
-
-### Multi-site Usage
-Filter case studies by `company` field to use same AITable for multiple sites:
+Multi-site filtering via `company` field:
 ```javascript
 const caseStudies = await getAllCaseStudies({ company: "FLEXRA" });
 ```
 
----
+### Blog Posts (`AITABLE_FLEXRA_BLOG_ID`)
+Key fields: `slug`, `Title`, `excerpt`, `content`, `featuredImage`, `category`, `published`, `date`
 
-## Blog System
+## API Authentication
+Protected routes require `x-api-key` header matching `POSTS_API_KEY`:
+```bash
+curl -X POST /api/case-studies -H "x-api-key: $POSTS_API_KEY" -d '{...}'
+```
 
-### AITable Fields
-Uses `AITABLE_FLEXRA_BLOG_ID` datasheet with similar structure.
-
-### API Endpoints
-- `GET /api/posts` - List all posts
-- `POST /api/posts` - Create new (requires API key)
-- `GET /api/posts/[slug]` - Get single
-- `PUT /api/posts/[slug]` - Update (requires API key)
-- `DELETE /api/posts/[slug]` - Delete (requires API key)
-
----
-
-## Styleguide Notes
-- See `STYLEGUIDE.md` for typography and component guidelines
-- Use `PageLayout` component for consistent page structure
-- Pastel colors: bg-pink-100, bg-yellow-100, bg-lime-100, bg-indigo-100
+## Styleguide Reference
+See `STYLEGUIDE.md` for complete design system including:
+- Typography (DM Sans for body, system fonts for headings)
+- Input styling: `rounded-xl border-gray-200 focus:border-gray-400 focus:ring-gray-200`
 - Section padding: `px-[5%] py-16 md:py-24 lg:py-28`
+- Pastel colors: `bg-pink-100`, `bg-yellow-100`, `bg-lime-100`, `bg-indigo-100`
+- Touch targets: minimum 44x44px for clickable elements
