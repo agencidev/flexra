@@ -1,4 +1,4 @@
-# 50 Blogginlägg - AI & Automation (Nov 2022 - Dec 2025)
+# 63 Blogginlägg - AI & Automation (Nov 2022 - Dec 2025)
 
 Backdaterade från ChatGPT-lanseringen 30 nov 2022.
 
@@ -108,7 +108,7 @@ Backdaterade från ChatGPT-lanseringen 30 nov 2022.
 
 ---
 
-## 2025 - Current Year (9 inlägg)
+## 2025 Q1-Q2 (10 inlägg)
 
 | # | Datum | Titel | Kategori |
 |---|-------|-------|----------|
@@ -121,28 +121,58 @@ Backdaterade från ChatGPT-lanseringen 30 nov 2022.
 | 48 | 28 apr 2025 | AI och hållbarhet: Så bidrar automation till grön omställning | Insikter |
 | 49 | 15 maj 2025 | Framtidens arbetsplats: AI som din nya kollega | Insikter |
 | 50 | 5 jun 2025 | Halvårsrapport 2025: AI-landskapet i Sverige | Nyheter |
+| 51 | 20 jun 2025 | AI-verktyg för sommarkontoret: Jobba smartare på semestern | Guider |
+
+---
+
+## 2025 Q3 - AI Regulation Era (6 inlägg)
+
+| # | Datum | Titel | Kategori |
+|---|-------|-------|----------|
+| 52 | 8 jul 2025 | EU AI Act: Så påverkas svenska företag av den nya lagen | Nyheter |
+| 53 | 25 jul 2025 | Automatisera din semester-OOO med AI | Guider |
+| 54 | 12 aug 2025 | AI för kreativa branscher: Design, copy och content | Insikter |
+| 55 | 28 aug 2025 | Från chatbot till AI-agent: Evolutionen fortsätter | Insikter |
+| 56 | 10 sep 2025 | Höststart: 10 AI-verktyg för en produktivare höst | Guider |
+| 57 | 25 sep 2025 | AI-säkerhet: Skydda ditt företag mot nya hot | Insikter |
+
+---
+
+## 2025 Q4 - Year in Review (6 inlägg)
+
+| # | Datum | Titel | Kategori |
+|---|-------|-------|----------|
+| 58 | 8 okt 2025 | Voice AI: Röstassistenter i företagsvärlden | Nyheter |
+| 59 | 22 okt 2025 | AI och företagskultur: Så får du med alla på tåget | Insikter |
+| 60 | 5 nov 2025 | GPT-5 och framtidens språkmodeller: Vad vi vet hittills | Nyheter |
+| 61 | 20 nov 2025 | Black Friday 2025: Årets bästa AI-erbjudanden | Guider |
+| 62 | 3 dec 2025 | Årets AI-genombrott: En tillbakablick på 2025 | Insikter |
+| 63 | 13 dec 2025 | AI-kalender 2026: Viktiga datum och händelser att bevaka | Guider |
 
 ---
 
 ## Sammanfattning
 
 **Fördelning per kategori:**
-- Insikter: 22 inlägg (44%)
-- Guider: 19 inlägg (38%)
-- Nyheter: 9 inlägg (18%)
+- Insikter: 27 inlägg (43%)
+- Guider: 24 inlägg (38%)
+- Nyheter: 12 inlägg (19%)
 
 **Fördelning per år:**
 - 2022: 3 inlägg
 - 2023: 18 inlägg
 - 2024: 20 inlägg
-- 2025: 9 inlägg
+- 2025: 22 inlägg
 
 **Teman som täcks:**
 - ChatGPT/LLM-utveckling
 - Praktiska AI-guider
-- Branschspecifikt (HR, ekonomi, juridik, e-handel, tillverkning)
+- Branschspecifikt (HR, ekonomi, juridik, e-handel, tillverkning, kreativa branscher)
 - Automation och workflow
 - AI-etik och governance
+- EU AI Act och reglering
+- AI-säkerhet
+- Voice AI och multimodala modeller
 - Trender och prognoser
 - Verktygsjämförelser
 - ROI och affärsnytta

@@ -74,13 +74,149 @@ const caseStudies = await getAllCaseStudies({ company: "FLEXRA" });
 ```
 
 ### Blog Posts (`AITABLE_FLEXRA_BLOG_ID`)
-Key fields: `slug`, `Title`, `excerpt`, `content`, `featuredImage`, `category`, `published`, `date`
+Key fields: `slug`, `Title`, `excerpt`, `content`, `featuredImage`, `category`, `published`, `date`, `author`, `keywords`, `imageAlt`
+
+**Important:** When creating blog posts, always use:
+- `author: "Markus Westerlund"` (not "Flexra" or other values)
+- `keywords`: Relevant SEO keywords for the post (comma-separated)
+- `imageAlt`: Unique, descriptive alt text for the hero image (avoid generic phrases)
 
 ## API Authentication
 Protected routes require `x-api-key` header matching `POSTS_API_KEY`:
 ```bash
 curl -X POST /api/case-studies -H "x-api-key: $POSTS_API_KEY" -d '{...}'
 ```
+
+---
+
+## Case Study Intake Process
+
+### Workflow
+1. Användaren fyller i prompten nedan med grundinfo + URLs
+2. Claude scrapar URLer för att hämta företagsinfo
+3. Claude genererar komplett case study-data
+4. Case skapas via POST till `/api/case-studies`
+
+### Intake Prompt
+
+```
+KUNDCASE: [Projektnamn]
+
+═══════════════════════════════════════════════════════════════
+1. KUND & URLs (för automatisk datahämtning)
+═══════════════════════════════════════════════════════════════
+Företagsnamn:
+Webbplats: [https://...] ← SCRAPA: företagsbeskrivning, bransch
+LinkedIn företag: [URL] ← SCRAPA: anställda, beskrivning
+Bransch: [Bygg/E-handel/Konsult/Finans/Tillverkning/Hälsovård/Utbildning/Transport/Fastighet/IT]
+
+═══════════════════════════════════════════════════════════════
+2. KONTAKTPERSON (för godkännande & testimonial)
+═══════════════════════════════════════════════════════════════
+Namn:
+Roll/titel:
+E-post:
+LinkedIn: [URL] ← SCRAPA: korrekt titel
+Får vi citera personen? [Ja/Nej/Fråga]
+
+═══════════════════════════════════════════════════════════════
+3. PROJEKTET
+═══════════════════════════════════════════════════════════════
+Vad var uppdraget (EN mening)?
+Kategori: [Processautomation/AI-integration/Integration/Dataanalys/Kundservice]
+System/verktyg: (t.ex. fortnox, slack, hubspot)
+Tidsperiod: [start] - [slut]
+Relevanta länkar: [docs, demo-URL, etc.]
+
+═══════════════════════════════════════════════════════════════
+4. SITUATIONEN FÖRE (Challenge)
+═══════════════════════════════════════════════════════════════
+Kundens huvudproblem:
+Hur hanterades det innan?
+Konkreta smärtpunkter:
+
+VALFRITT - om du VET siffran:
+- Tid som processen tog innan: [X timmar/vecka]
+- Antal fel/problem: [X per månad]
+
+═══════════════════════════════════════════════════════════════
+5. VAD VI GJORDE (Solution)
+═══════════════════════════════════════════════════════════════
+Beskriv lösningen (2-3 meningar):
+Huvudsteg i implementationen:
+Integrationer som byggdes:
+Implementationstid:
+
+═══════════════════════════════════════════════════════════════
+6. MÄTBARA RESULTAT - ⚠️ ENDAST VERIFIERBARA SIFFROR!
+═══════════════════════════════════════════════════════════════
+Välj DE som är verifierbara:
+
+□ Tidsbesparing: ___ timmar/[vecka/månad]
+  Hur vet vi detta? ___
+
+□ Kostnadsbesparing: ___ kr/[månad/år]
+  Hur vet vi detta? ___
+
+□ Antal automatiserade processer: ___/[dag/vecka/månad]
+  Hur vet vi detta? ___
+
+□ Minskade fel: från ___ till ___
+  Hur vet vi detta? ___
+
+OM INGA EXAKTA SIFFROR: Beskriv kvalitativa förbättringar istället.
+
+═══════════════════════════════════════════════════════════════
+7. KUNDENS ORD (Testimonial)
+═══════════════════════════════════════════════════════════════
+Citat: "___"
+Godkänt för publicering? [Ja/Nej/Väntar]
+
+═══════════════════════════════════════════════════════════════
+8. BILDER
+═══════════════════════════════════════════════════════════════
+Hero-bild: [URL eller "behöver skapas"]
+Kundlogotyp: [URL]
+Screenshots: [URL-lista]
+```
+
+### AITable Fält-mapping
+
+| Intake-fält | AITable-kolumn | Källa |
+|-------------|----------------|-------|
+| Företagsnamn | `client` | Input |
+| Bransch | `industry` | Input/scraping |
+| Projekt-titel | `title` | Genereras |
+| Kategori | `category` | Input |
+| System/verktyg | `techStack` | Input (kommaseparerat) |
+| Situationen före | `challenge` | Input → Markdown |
+| Vad vi gjorde | `solution` | Input → Markdown |
+| Mätbara resultat | `results` + `metrics` | Input → Markdown + JSON |
+| Citat | `testimonial` | Input |
+| Kontaktperson | `testimonialAuthor`, `testimonialRole` | Input/LinkedIn |
+| Bilder | `heroImage`, `clientLogo`, `gallery` | URLs |
+
+**Auto-genererade:**
+- `slug` - från title
+- `excerpt` - från challenge (max 160 tecken)
+- `categoryColor` - baserat på category
+- `date` - dagens datum
+- `company` - "FLEXRA"
+- `metaTitle`, `metaDescription`, `keywords` - SEO-optimerade
+
+### Metrics-strategi
+
+**Alternativ 1 - Verkliga siffror:**
+```json
+[{"value": "15h", "label": "Sparad tid per vecka"}, {"value": "3", "label": "Integrerade system"}]
+```
+
+**Alternativ 2 - Kvalitativa:**
+```json
+[{"value": "100%", "label": "Automatiserat flöde"}, {"value": "24/7", "label": "Tillgänglighet"}]
+```
+
+**Alternativ 3 - Inga metrics:** Sätt `metrics: []` (sektionen visas inte)
 
 ## Styleguide Reference
 See `STYLEGUIDE.md` for complete design system including:
