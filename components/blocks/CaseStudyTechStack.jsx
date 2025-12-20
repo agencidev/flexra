@@ -66,10 +66,22 @@ const techLogos = {
   anthropic: { name: "Anthropic", logo: "/logos/anthropic.webp" },
   gemini: { name: "Gemini", logo: "/logos/gemini.svg" },
   perplexity: { name: "Perplexity", logo: "/logos/perplexity.svg" },
+  copilot: { name: "Microsoft Copilot", logo: "/logos/copilot.svg" },
+  chatbot: { name: "Chatbot-integration", logo: "/logos/chatbot.svg" },
 
   // E-handel
   shopify: { name: "Shopify", logo: "/logos/shopify.svg" },
   woocommerce: { name: "WooCommerce", logo: "/logos/woocommerce.svg" },
+
+  // CMS
+  wordpress: { name: "WordPress", logo: "/logos/wordpress.svg" },
+
+  // Utveckling/Databas
+  nextjs: { name: "Next.js", logo: "/logos/nextjs.svg" },
+  supabase: { name: "Supabase", logo: "/logos/supabase.svg" },
+
+  // Övrigt
+  api: { name: "API-integration", logo: "/logos/api.svg" },
 
   // Schemaläggning
   calendly: { name: "Calendly", logo: "/logos/calendly.svg" },

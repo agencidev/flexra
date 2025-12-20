@@ -7,7 +7,7 @@ import { Layout442 } from "../components/Layout442";
 import { BlogCarousel } from "../components/blocks/BlogCarousel";
 import { Cta7 } from "../components/Cta7";
 import { Footer1 } from "../components/Footer1";
-import { ContactFormWizard } from "../components/blocks";
+import { ContactFormWizard, IntegrationBuilderInline } from "../components/blocks";
 import { getAllPosts } from "../lib/posts";
 
 export const revalidate = 3600; // Revalidera varje timme
@@ -22,6 +22,7 @@ export default async function Page() {
       <Header23 />
       <Layout396 />
       <Logo3 />
+      <IntegrationBuilderInline />
       <Layout29 />
       <Layout442 />
 

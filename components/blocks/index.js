@@ -24,10 +24,14 @@ export { BlogListWithSearch } from "./BlogListWithSearch";
 export { ContactForm } from "./ContactForm";
 export { ContactFormWizard } from "./ContactFormWizard";
 
+// Integration Builder
+export { IntegrationBuilderInline } from "./IntegrationBuilderInline";
+
 // Case Studies
 export { CaseStudyMetrics } from "./CaseStudyMetrics";
 export { CaseStudyTechStack } from "./CaseStudyTechStack";
 export { CaseStudyGallery } from "./CaseStudyGallery";
+export { DeviceMockup } from "./DeviceMockup";
 
 // Planerade komponenter (uncomment när de skapas):
 // export { Testimonials } from "./Testimonials";

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Building2, Calendar, Quote } from "lucide-react";
 import { Navbar1 } from "../../../components/Navbar1";
 import { Footer1 } from "../../../components/Footer1";
-import { CaseStudyMetrics, CaseStudyTechStack, CaseStudyGallery } from "../../../components/blocks";
+import { CaseStudyMetrics, CaseStudyTechStack, CaseStudyGallery, DeviceMockup } from "../../../components/blocks";
 import { getCaseStudyBySlug, getRelatedCaseStudies, getAllCaseStudies } from "../../../lib/case-studies";
 import { GetStartedButton } from "../../../components/ui/get-started-button";
 import { Button } from "../../../components/ui/button";
@@ -130,6 +130,38 @@ function parseInlineMarkdown(text) {
     }
     return part;
   });
+}
+
+/**
+ * Tar bort första rubriken om den matchar sektionsnamnet
+ * Förhindrar dubbla rubriker (mallen + innehållet)
+ */
+function stripLeadingHeading(content, sectionKeywords = []) {
+  if (!content) return content;
+
+  const lines = content.split("\n");
+  const firstLine = lines[0]?.trim() || "";
+
+  // Kolla om första raden är en h2 eller h3
+  if (firstLine.startsWith("## ") || firstLine.startsWith("### ")) {
+    const headingText = firstLine.replace(/^#+ /, "").toLowerCase();
+
+    // Kolla om rubriken matchar något av nyckelorden
+    const matches = sectionKeywords.some(keyword =>
+      headingText.includes(keyword.toLowerCase())
+    );
+
+    if (matches) {
+      // Ta bort första raden och eventuella tomma rader efter
+      let startIndex = 1;
+      while (startIndex < lines.length && lines[startIndex].trim() === "") {
+        startIndex++;
+      }
+      return lines.slice(startIndex).join("\n");
+    }
+  }
+
+  return content;
 }
 
 // Generera metadata dynamiskt för SEO
@@ -313,31 +345,56 @@ export default async function CaseStudyPage({ params }) {
         </div>
       </div>
 
-      {/* Metrics Section */}
-      {caseStudy.metrics && caseStudy.metrics.length > 0 && (
-        <section className="px-[5%] -mt-8 relative z-10">
+      {/* Metrics + DeviceMockup kombinerat för webbprojekt */}
+      {(caseStudy.desktopScreenshot || caseStudy.mobileScreenshot) ? (
+        <section className="px-[5%] -mt-8 relative">
           <div className="container max-w-5xl mx-auto">
-            <CaseStudyMetrics metrics={caseStudy.metrics} />
-          </div>
-        </section>
-      )}
-
-      {/* Hero Image */}
-      {caseStudy.heroImage && (
-        <section className="px-[5%] py-12 md:py-16">
-          <div className="container max-w-5xl mx-auto">
-            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
-              <Image
-                src={caseStudy.heroImage}
-                alt={caseStudy.title}
-                fill
-                sizes="(min-width: 1024px) 1024px, 100vw"
-                className="object-cover"
-                priority
+            {/* Metrics överst med högre z-index */}
+            {caseStudy.metrics && caseStudy.metrics.length > 0 && (
+              <div className="relative z-20">
+                <CaseStudyMetrics metrics={caseStudy.metrics} />
+              </div>
+            )}
+            {/* DeviceMockup under metrics med negativ margin för överlapp */}
+            <div className="relative z-10 -mt-8 md:-mt-12">
+              <DeviceMockup
+                desktopImage={caseStudy.desktopScreenshot}
+                mobileImage={caseStudy.mobileScreenshot}
+                websiteUrl={caseStudy.websiteUrl}
+                alt={`${caseStudy.client} webbplats`}
               />
             </div>
           </div>
         </section>
+      ) : (
+        <>
+          {/* Metrics Section (utan webbprojekt) */}
+          {caseStudy.metrics && caseStudy.metrics.length > 0 && (
+            <section className="px-[5%] -mt-8 relative z-10">
+              <div className="container max-w-5xl mx-auto">
+                <CaseStudyMetrics metrics={caseStudy.metrics} />
+              </div>
+            </section>
+          )}
+
+          {/* Hero Image (för icke-webbprojekt) */}
+          {caseStudy.heroImage && (
+            <section className="px-[5%] py-12 md:py-16">
+              <div className="container max-w-5xl mx-auto">
+                <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
+                  <Image
+                    src={caseStudy.heroImage}
+                    alt={caseStudy.title}
+                    fill
+                    sizes="(min-width: 1024px) 1024px, 100vw"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </section>
+          )}
+        </>
       )}
 
       {/* Content + Sidebar */}
@@ -351,7 +408,7 @@ export default async function CaseStudyPage({ params }) {
                 <div className="mb-12">
                   <h2 className="mb-6">Utmaningen</h2>
                   <div className="prose prose-lg max-w-none">
-                    {parseMarkdown(caseStudy.challenge)}
+                    {parseMarkdown(stripLeadingHeading(caseStudy.challenge, ["utmaning", "challenge"]))}
                   </div>
                 </div>
               )}
@@ -361,7 +418,7 @@ export default async function CaseStudyPage({ params }) {
                 <div className="mb-12">
                   <h2 className="mb-6">Vår lösning</h2>
                   <div className="prose prose-lg max-w-none">
-                    {parseMarkdown(caseStudy.solution)}
+                    {parseMarkdown(stripLeadingHeading(caseStudy.solution, ["lösning", "solution", "vår lösning"]))}
                   </div>
                 </div>
               )}
@@ -371,7 +428,7 @@ export default async function CaseStudyPage({ params }) {
                 <div className="mb-12">
                   <h2 className="mb-6">Resultaten</h2>
                   <div className="prose prose-lg max-w-none">
-                    {parseMarkdown(caseStudy.results)}
+                    {parseMarkdown(stripLeadingHeading(caseStudy.results, ["resultat", "results"]))}
                   </div>
                 </div>
               )}
@@ -452,7 +509,7 @@ export default async function CaseStudyPage({ params }) {
 
       {/* Testimonial */}
       {caseStudy.testimonial && (
-        <section className="px-[5%] py-16 md:py-24">
+        <section className="px-[5%] py-10 md:py-14">
           <div className="container max-w-3xl mx-auto text-center">
             <Quote className="w-12 h-12 text-gray-200 mx-auto mb-6" />
             <blockquote className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-6">

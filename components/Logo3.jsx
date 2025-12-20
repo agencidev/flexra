@@ -4,13 +4,12 @@ import React from "react";
 import Image from "next/image";
 
 const logos = [
-  { src: "/67161e62c6b981f635e078f2_ab-karl-hedin-logo.png", alt: "AB Karl Hedin", width: 851, height: 186 },
-  { src: "/RMS_Logotyp_2col-scaled-1-2048x760.png", alt: "RMS", width: 2048, height: 760 },
-  { src: "/varubud-logo.png", alt: "Varubud", width: 300, height: 114 },
-  { src: "/imi-go-blue-1200x630-1-1.png", alt: "IMI", width: 349, height: 447, className: "scale-150" },
-  { src: "/landrins_bil_eskilstuna_25954_21031215034789_klicket_se.png", alt: "Landrins Bil", width: 1249, height: 174 },
-  { src: "/207704985-origpic-3b5838.png", alt: "Partner", width: 994, height: 266 },
-  { src: "/BiltjL.png", alt: "Biltjänst", width: 400, height: 106 },
+  { src: "/ab-karl-hedin-logo.webp", alt: "AB Karl Hedin", width: 851, height: 186 },
+  { src: "/rms-logo.webp", alt: "RMS", width: 2048, height: 760 },
+  { src: "/varubud-logo.webp", alt: "Varubud", width: 300, height: 114 },
+  { src: "/landrins-bil-logo.webp", alt: "Landrins Bil", width: 1249, height: 174 },
+  { src: "/biltjanst-logo.webp", alt: "Biltjänst", width: 400, height: 106 },
+  { src: "/therooftopguide-logo.svg", alt: "The Rooftop Guide", width: 1050, height: 232 },
 ];
 
 export function Logo3() {

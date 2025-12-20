@@ -81,6 +81,12 @@ const tools = [
     logo: "/logos/windsurf.svg",
     url: "https://codeium.com/windsurf",
     description: "AI-kodredigerare med agentiskt workflow för snabbare utveckling."
+  },
+  {
+    name: "Microsoft Copilot",
+    logo: "/logos/copilot.svg",
+    url: "https://copilot.microsoft.com",
+    description: "AI-assistent integrerad i Microsoft 365 för produktivitet och automation."
   }
 ];
 
@@ -130,6 +136,8 @@ const integrations = [
   { name: "Intercom", logo: "/logos/intercom.svg", url: "https://intercom.com" },
   // Övrigt
   { name: "Zapier", logo: "/logos/zapier.svg", url: "https://zapier.com" },
+  // Chatbot
+  { name: "Chatbot", logo: "/logos/chatbot.svg", url: "#" },
 ];
 
 const services = [

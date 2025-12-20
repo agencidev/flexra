@@ -28,6 +28,7 @@ export function SystemSelector() {
   const categoryOrder = [
     "accounting",
     "payments",
+    "ecommerce",
     "crm",
     "communication",
     "storage",

@@ -172,12 +172,29 @@ OM INGA EXAKTA SIFFROR: Beskriv kvalitativa förbättringar istället.
 Citat: "___"
 Godkänt för publicering? [Ja/Nej/Väntar]
 
+⚠️ SKRIVREGEL FÖR CITAT:
+- Skriv naturligt, som en människa pratar
+- UNDVIK tankstreck (–) och formella konstruktioner
+- Använd komma eller punkt istället
+- Kort och koncist, max 2-3 meningar
+
 ═══════════════════════════════════════════════════════════════
-8. BILDER
+8. SEO (genereras automatiskt men kan anpassas)
 ═══════════════════════════════════════════════════════════════
-Hero-bild: [URL eller "behöver skapas"]
-Kundlogotyp: [URL]
-Screenshots: [URL-lista]
+Meta-titel: [lämna tomt för auto] eller anpassad
+Meta-beskrivning: [lämna tomt för auto] eller anpassad (max 160 tecken)
+Nyckelord: [kommaseparerade] eller lämna tomt
+
+═══════════════════════════════════════════════════════════════
+9. BILDER (⚠️ LOKALA FILER KRÄVS!)
+═══════════════════════════════════════════════════════════════
+Hero-bild: [lokal sökväg i /public/ eller "behöver laddas upp"]
+Kundlogotyp: [lokal sökväg i /public/ - BE ANVÄNDAREN LADDA UPP]
+Screenshots: [lokala sökvägar]
+
+⚠️ VIKTIGT: Hämta ALDRIG logotyper från kundens webbplats!
+   Be alltid användaren ladda upp loggan till /public/ först.
+   Konvertera till WebP innan användning.
 ```
 
 ### AITable Fält-mapping
@@ -194,7 +211,8 @@ Screenshots: [URL-lista]
 | Mätbara resultat | `results` + `metrics` | Input → Markdown + JSON |
 | Citat | `testimonial` | Input |
 | Kontaktperson | `testimonialAuthor`, `testimonialRole` | Input/LinkedIn |
-| Bilder | `heroImage`, `clientLogo`, `gallery` | URLs |
+| Bilder | `heroImage`, `clientLogo`, `gallery` | Lokala sökvägar (ex: `/kund-logo.webp`) |
+| SEO | `metaTitle`, `metaDescription`, `keywords` | Input eller auto-genereras |
 
 **Auto-genererade:**
 - `slug` - från title
@@ -202,7 +220,18 @@ Screenshots: [URL-lista]
 - `categoryColor` - baserat på category
 - `date` - dagens datum
 - `company` - "FLEXRA"
-- `metaTitle`, `metaDescription`, `keywords` - SEO-optimerade
+- `metaTitle` - från title om ej angivet
+- `metaDescription` - från excerpt om ej angivet
+- `keywords` - bransch + kategori + verktyg
+
+### Skrivriktlinjer för Case Studies
+
+⚠️ **UNDVIK AI-SPRÅK:**
+- Inga tankstreck (–) i löpande text, använd komma eller punkt
+- Inga överflödiga utfyllnadsord
+- Skriv kort och konkret
+- Använd aktiv form ("Vi byggde..." inte "Det byggdes...")
+- Citat ska låta som riktig talspråk
 
 ### Metrics-strategi
 

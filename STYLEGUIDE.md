@@ -219,6 +219,8 @@ Dessa används för kort, badges, ikoner och dekorativa element.
 | **Gul/Yellow** | `#FEF9C3` | `rgb(254, 249, 195)` | `bg-yellow-100` | Kort, CTA-bakgrund, badges |
 | **Lime/Grön** | `#ECFCCB` | `rgb(236, 252, 203)` | `bg-lime-100` | Kort, badges, ikon-bakgrund |
 | **Indigo/Blå** | `#E0E7FF` | `rgb(224, 231, 255)` | `bg-indigo-100` | Kort, markerade element, CTA |
+| **Cyan/Turkos** | `#CFFAFE` | `rgb(207, 250, 254)` | `bg-cyan-100` | Kort, badges, ikon-bakgrund |
+| **Peach/Orange** | `#FFEDD5` | `rgb(255, 237, 213)` | `bg-orange-100` | Kort, badges, ikon-bakgrund |
 
 #### Mörkare varianter (för text på pastellbakgrund)
 | Namn | HEX | Tailwind | Användning |
@@ -228,6 +230,8 @@ Dessa används för kort, badges, ikoner och dekorativa element.
 | **Lime text** | `#65A30D` | `text-lime-600` / `text-lime-700` | Text på lime bakgrund |
 | **Indigo text** | - | `text-indigo-800` | Text på indigo bakgrund |
 | **Indigo border** | `#6366F1` | `border-indigo-500` | Ram på indigo kort |
+| **Cyan text** | - | `text-cyan-800` | Text på cyan bakgrund |
+| **Orange text** | - | `text-orange-800` | Text på peach/orange bakgrund |
 
 ### 2.3 Gråskala
 
