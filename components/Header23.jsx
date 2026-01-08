@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import Iridescence from "./Iridescence";
 import { Button } from "./ui/button";
 import { GetStartedButton } from "./ui/get-started-button";
@@ -33,8 +34,12 @@ export function Header23() {
               innovation, kunder och tillväxt.
             </p>
             <div className="mt-6 flex items-center justify-center gap-x-4 md:mt-8">
-              <GetStartedButton>Boka möte</GetStartedButton>
-              <Button variant="link-alt" className="text-white">Läs mer</Button>
+              <Link href="/kontakt">
+                <GetStartedButton>Boka möte</GetStartedButton>
+              </Link>
+              <Link href="/vad-vi-gor">
+                <Button variant="link-alt" className="text-white">Läs mer</Button>
+              </Link>
             </div>
           </div>
         </div>

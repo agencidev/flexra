@@ -22,40 +22,8 @@ export function Footer1() {
         <div className="container">
           {/* Top section - tagline and navigation */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 pb-16 md:pb-20 lg:pb-24">
-            {/* Left side - Team avatars and tagline */}
+            {/* Left side - Tagline */}
             <div className="flex flex-col">
-              {/* Team avatars */}
-              <div className="flex -space-x-2 mb-6">
-                <div className="relative w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
-                    alt=""
-                    fill
-                    sizes="40px"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
-                    alt=""
-                    fill
-                    sizes="40px"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative w-10 h-10 rounded-full bg-gray-600 border-2 border-[#1a1a1a] overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
-                    alt=""
-                    fill
-                    sizes="40px"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-              
-              {/* Tagline */}
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
                 AI och automation som<br />
                 <span className="italic font-normal text-white/70">inte står i vägen.</span>
@@ -94,7 +62,7 @@ export function Footer1() {
               Alla rättigheter förbehållna.
             </p>
             <p className="text-xs text-white/50 mt-2 md:mt-0">
-              © 2025 Flexra Consulting AB
+              © {new Date().getFullYear()} Flexra Consulting AB
             </p>
           </div>
         </div>

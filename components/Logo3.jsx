@@ -2,14 +2,14 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const logos = [
-  { src: "/ab-karl-hedin-logo.webp", alt: "AB Karl Hedin", width: 851, height: 186 },
-  { src: "/rms-logo.webp", alt: "RMS", width: 2048, height: 760 },
-  { src: "/varubud-logo.webp", alt: "Varubud", width: 300, height: 114 },
-  { src: "/landrins-bil-logo.webp", alt: "Landrins Bil", width: 1249, height: 174 },
-  { src: "/biltjanst-logo.webp", alt: "Biltjänst", width: 400, height: 106 },
-  { src: "/therooftopguide-logo.svg", alt: "The Rooftop Guide", width: 1050, height: 232 },
+  { src: "/customers/rms-logo.webp", alt: "RMS", width: 2048, height: 760, url: "https://www.roadmobilityservices.com" },
+  { src: "/customers/varubud-logo.webp", alt: "Varubud", width: 300, height: 114, url: "https://varubud.se" },
+  { src: "/customers/landrins-bil-logo.webp", alt: "Landrins Bil", width: 1249, height: 174, url: "https://landrinsbil.se" },
+  { src: "/customers/biltjanst-logo.webp", alt: "Biltjänst Serrander Bil", width: 400, height: 106, url: "https://serranderbil.se" },
+  { src: "/therooftopguide-logo.svg", alt: "The Rooftop Guide", width: 1050, height: 232, url: "https://therooftopguide.com" },
 ];
 
 export function Logo3() {
@@ -33,29 +33,43 @@ export function Logo3() {
             {/* First set of logos */}
             <div className="flex shrink-0 animate-logo-scroll items-center">
               {logos.map((logo, index) => (
-                <Image
+                <Link
                   key={`logo-1-${index}`}
-                  className={`mx-12 md:mx-16 max-h-10 max-w-[120px] md:max-w-[150px] shrink-0 object-contain ${logo.className || ''}`}
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={logo.width}
-                  height={logo.height}
-                  sizes="(min-width: 768px) 150px, 120px"
-                />
+                  href={logo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-12 md:mx-16 shrink-0 hover:opacity-70 transition-opacity"
+                >
+                  <Image
+                    className={`max-h-10 max-w-[120px] md:max-w-[150px] object-contain ${logo.className || ''}`}
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={logo.width}
+                    height={logo.height}
+                    sizes="(min-width: 768px) 150px, 120px"
+                  />
+                </Link>
               ))}
             </div>
             {/* Duplicate for seamless loop */}
             <div className="flex shrink-0 animate-logo-scroll items-center">
               {logos.map((logo, index) => (
-                <Image
+                <Link
                   key={`logo-2-${index}`}
-                  className={`mx-12 md:mx-16 max-h-10 max-w-[120px] md:max-w-[150px] shrink-0 object-contain ${logo.className || ''}`}
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={logo.width}
-                  height={logo.height}
-                  sizes="(min-width: 768px) 150px, 120px"
-                />
+                  href={logo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-12 md:mx-16 shrink-0 hover:opacity-70 transition-opacity"
+                >
+                  <Image
+                    className={`max-h-10 max-w-[120px] md:max-w-[150px] object-contain ${logo.className || ''}`}
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={logo.width}
+                    height={logo.height}
+                    sizes="(min-width: 768px) 150px, 120px"
+                  />
+                </Link>
               ))}
             </div>
           </div>

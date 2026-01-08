@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { GetStartedButton } from "./ui/get-started-button";
 import Image from "next/image";
 
@@ -22,14 +23,16 @@ export function Layout442() {
               fungerar i verkligheten.
             </p>
             <div className="mt-6 flex flex-wrap gap-4 md:mt-8">
-              <GetStartedButton>Kontakta</GetStartedButton>
+              <Link href="/kontakt">
+                <GetStartedButton>Kontakta</GetStartedButton>
+              </Link>
             </div>
           </div>
         </div>
       </div>
       <div className="absolute inset-0 z-0">
         <Image
-          src="/477574545_952501333656469_9057813305953097372_n.webp"
+          src="/customers/imi-go-blue.webp"
           alt="Bakgrundsbild"
           fill
           priority

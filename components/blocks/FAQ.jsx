@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { GetStartedButton } from "../ui/get-started-button";
 
 const defaultFaqItems = [
@@ -243,7 +244,9 @@ export function FAQ({
 
           {/* CTA - centered */}
           <div className={`text-center ${hasAnimated ? "faq-fade-up" : "faq-item-initial"}`} style={{ animationDelay: "0.6s" }}>
-            <GetStartedButton dark>{ctaText}</GetStartedButton>
+            <Link href="/kontakt">
+              <GetStartedButton dark>{ctaText}</GetStartedButton>
+            </Link>
           </div>
         </div>
       </div>

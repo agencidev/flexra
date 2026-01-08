@@ -207,7 +207,9 @@ export default function VadViGorPage() {
             </p>
             
             {/* CTA Button */}
-            <GetStartedButton dark>Boka demo</GetStartedButton>
+            <Link href="/kontakt">
+              <GetStartedButton dark>Boka demo</GetStartedButton>
+            </Link>
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Button } from "./ui/button";
 import { GetStartedButton } from "./ui/get-started-button";
 
@@ -24,8 +25,12 @@ export function Cta7() {
             </div>
           </div>
           <div className="flex items-start justify-start gap-4">
-            <GetStartedButton dark>Boka</GetStartedButton>
-            <Button variant="outline">Läs mer</Button>
+            <Link href="/kontakt">
+              <GetStartedButton dark>Boka</GetStartedButton>
+            </Link>
+            <Link href="/om-flexra">
+              <Button variant="outline">Läs mer</Button>
+            </Link>
           </div>
         </div>
       </div>
